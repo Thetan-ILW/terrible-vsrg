@@ -7,7 +7,7 @@ public class WifeScoreSystem : IScoreSystem
     private float _maxPoints = 0f;
     private float _miss = 0;
 
-    public float Accuracy = 0;
+    public float Accuracy { get; private set; }
 
     public WifeScoreSystem(float timingScale)
     {

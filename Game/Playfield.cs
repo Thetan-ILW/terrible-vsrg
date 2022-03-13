@@ -30,7 +30,7 @@ public class Playfield : Node2D
         );
 
         SkinFabric skinFabric = new SkinFabric();
-        _skin = skinFabric.Build(_chart.inputMode, "/home/righeil/Code/Skin/");
+        _skin = skinFabric.Build(_chart.inputMode, "Userdata/Skin/", "4k.json");
 
         int[] inputMap = new int[4] {
             (int)KeyList.A,
@@ -49,10 +49,10 @@ public class Playfield : Node2D
         _gameLogic = new GameLogic(
             _noteLogic,
             _inputLogic,
-            ref _chart.note
+            ref _chart.notes
         );
 
-        _conveyor.Construct(ref _chart.note, _skin, _inputLogic, 1.3f);
+        _conveyor.Construct(ref _chart.notes, _skin, _inputLogic, 1.3f);
         _info.Construct(_skin, _scoreSystem);
     }
 

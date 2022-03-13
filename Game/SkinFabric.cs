@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 
-public class SkinSettings
+public struct SkinSettings
 {
     public int InputMode;
 
@@ -66,10 +66,10 @@ public class Skin
 
 public class SkinFabric
 {
-    public Skin Build(int inputMode, string skinFolder)
+    public Skin Build(int inputMode, string skinFolder, string skinFile)
     {
         SkinSettings skinSettings;
-        using (StreamReader file = System.IO.File.OpenText(skinFolder + "4k.json"))
+        using (StreamReader file = System.IO.File.OpenText(skinFolder + skinFile))
         {
             JsonSerializer serializer = new JsonSerializer();
             skinSettings = (SkinSettings)serializer.Deserialize(file, typeof(SkinSettings));

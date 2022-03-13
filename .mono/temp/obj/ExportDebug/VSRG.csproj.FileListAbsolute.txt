@@ -1,0 +1,11 @@
+/home/righeil/Code/VSRG/.mono/temp/bin/ExportDebug/VSRG.dll
+/home/righeil/Code/VSRG/.mono/temp/bin/ExportDebug/VSRG.pdb
+/home/righeil/Code/VSRG/.mono/temp/bin/ExportDebug/Newtonsoft.Json.dll
+/home/righeil/Code/VSRG/.mono/temp/obj/ExportDebug/VSRG.csproj.AssemblyReference.cache
+/home/righeil/Code/VSRG/.mono/temp/obj/ExportDebug/VSRG.GeneratedMSBuildEditorConfig.editorconfig
+/home/righeil/Code/VSRG/.mono/temp/obj/ExportDebug/VSRG.AssemblyInfoInputs.cache
+/home/righeil/Code/VSRG/.mono/temp/obj/ExportDebug/VSRG.AssemblyInfo.cs
+/home/righeil/Code/VSRG/.mono/temp/obj/ExportDebug/VSRG.csproj.CoreCompileInputs.cache
+/home/righeil/Code/VSRG/.mono/temp/obj/ExportDebug/VSRG.csproj.CopyComplete
+/home/righeil/Code/VSRG/.mono/temp/obj/ExportDebug/VSRG.dll
+/home/righeil/Code/VSRG/.mono/temp/obj/ExportDebug/VSRG.pdb

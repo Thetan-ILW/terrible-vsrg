@@ -24,15 +24,15 @@ public struct Chart
     public string title;
     public string difficulty;
     public int inputMode; // сделай их константами браток
-    public Note[] note;
+    public Note[] notes;
 
-    public Chart(string artist, string title, string difficulty, int inputMode, Note[] note)
+    public Chart(string artist, string title, string difficulty, int inputMode, Note[] notes)
     {
         this.artist = artist;
         this.title = title;
         this.difficulty = difficulty;
         this.inputMode = inputMode;
-        this.note = note;
+        this.notes = notes;
     }
 }
 
@@ -41,16 +41,16 @@ public class GameLogic
     private NoteLogic _noteLogic;
     private InputLogic _inputLogic;
 
-    private Note[] _note;
+    private Note[] _notes;
 
     public float CurrentTime = 0;
     public int NextExistingNote = 0;
 
-    public GameLogic(NoteLogic noteLogic, InputLogic inputLogic, ref Note[] note)
+    public GameLogic(NoteLogic noteLogic, InputLogic inputLogic, ref Note[] notes)
     {
         _noteLogic = noteLogic;
         _inputLogic = inputLogic;
-        _note = note;
+        _notes = notes;
     }
 
     public void Process()
@@ -58,7 +58,7 @@ public class GameLogic
         _noteLogic.CurrentTime = CurrentTime;
         _noteLogic.NextExistingNote = NextExistingNote;
 
-        _noteLogic.Process(ref _note);
+        _noteLogic.Process(ref _notes);
         GetNextExistingNote();
     }
 
@@ -69,16 +69,16 @@ public class GameLogic
             _inputLogic.CurrentTime = CurrentTime;
             _inputLogic.NextExistingNote = NextExistingNote;
 
-            _inputLogic.Process(keyEvent, ref _note);
+            _inputLogic.Process(keyEvent, ref _notes);
             GetNextExistingNote();
         }
     }
 
     public void GetNextExistingNote()
     {
-        for (int i = NextExistingNote; i != _note.GetLength(0); i++)
+        for (int i = NextExistingNote; i != _notes.GetLength(0); i++)
         {
-            if (_note[i].isExist == true)
+            if (_notes[i].isExist == true)
             {
                 NextExistingNote = i;
                 return;

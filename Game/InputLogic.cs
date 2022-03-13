@@ -16,7 +16,7 @@ public abstract class InputLogic // Реагирует на нажатия иг�
         KeyState[key] = state;
     }
 
-    public void Process(InputEventKey keyEvent, ref Note[] note)
+    public void Process(InputEventKey keyEvent, ref Note[] notes)
     {
         if (keyEvent.Pressed)
         {
@@ -29,7 +29,7 @@ public abstract class InputLogic // Реагирует на нажатия иг�
                         return; // Спасёт от даблсетаперов, и хуйни как при зажатии кнопки при печати, но самое по себе решение тупое блять как и я
                     
                     ChangeKeyState(column, true);
-                    ProcessPress(column, CurrentTime, ref note);
+                    ProcessPress(column, CurrentTime, ref notes);
                     return;
                 }
                 column++;
@@ -65,15 +65,15 @@ public class EarlyInputLogic : InputLogic
         KeyState = new bool[inputMode];
     }
 
-    public override void ProcessPress(int column, float time, ref Note[] note)
+    public override void ProcessPress(int column, float time, ref Note[] notes)
     {
         float deltaTime = 0;
         float earlyTime = 0;
         float lateTime = 0;
 
-        for (int i = NextExistingNote; i != note.GetLength(0) ; i++)
+        for (int i = NextExistingNote; i != notes.GetLength(0) ; i++)
         {
-            ref Note n = ref note[i];
+            ref Note n = ref notes[i];
 
             if (n.column != column)
                 continue;
@@ -107,7 +107,7 @@ public class NearestInputLogic : InputLogic
         KeyState = new bool[inputMode];
     }
 
-    public override void ProcessPress(int column, float time, ref Note[] note)
+    public override void ProcessPress(int column, float time, ref Note[] notes)
     {
        throw new NotImplementedException();
     }

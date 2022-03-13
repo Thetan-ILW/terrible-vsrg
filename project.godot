@@ -15,10 +15,6 @@ run/main_scene="res://Playfield.tscn"
 boot_splash/bg_color=Color( 0.109804, 0.109804, 0.109804, 1 )
 config/icon="res://icon.png"
 
-[debug]
-
-settings/fps/force_fps=240
-
 [display]
 
 window/size/width=1280

@@ -1,0 +1,60 @@
+{
+    "inputMode": 7,
+
+    "position": [
+        140,
+        530
+    ],
+
+    "noteSize": [
+        146,
+        146
+    ],
+
+    "keySize": [
+        146,
+        146
+    ],
+
+    "noteImage": [
+        "note-0.png",
+        "note-1.png",
+        "note-2.png",
+        "note-3.png",
+        "note-2.png",
+        "note-1.png",
+        "note-3.png"
+    ],
+
+    "keyImage": [
+        "key-0.png",
+        "key-1.png",
+        "key-2.png",
+        "key-3.png",
+        "key-2.png",
+        "key-1.png",
+        "key-3.png"
+    ],
+
+    "keyPressedImage": [
+        "keyP-0.png",
+        "keyP-1.png",
+        "keyP-2.png",
+        "keyP-3.png",
+        "keyP-2.png",
+        "keyP-1.png",
+        "keyP-3.png"
+    ],
+
+    "comboPosition": [
+        600,
+        310
+    ],
+
+    "accuracyPosition":[
+        5,
+        5
+    ],
+    
+    "accuracyFormat": "{0:P2}"
+}

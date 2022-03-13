@@ -4,16 +4,16 @@ using System;
 public class Conveyor : Node2D
 {
     private Skin _skin;
-    private Note[] _note; // тут ссылка на ноты если чё
+    private Note[] _notes; // тут ссылка на ноты если чё
     private InputLogic _inputLogic;
 
     public float ScrollSpeed = 0;
     public float CurrentTime = 0;
     public int NextExistingNote = 0;
 
-    public void Construct(ref Note[] note, Skin skin, InputLogic inputLogic, float scrollSpeed)
+    public void Construct(ref Note[] notes, Skin skin, InputLogic inputLogic, float scrollSpeed)
     {
-        _note = note;
+        _notes = notes;
         _skin = skin;
         _inputLogic = inputLogic;
         ScrollSpeed = scrollSpeed;
@@ -28,24 +28,24 @@ public class Conveyor : Node2D
     {
         // Notes
         // Начинаем рисовать с самой ранней существующей ноты 
-        for (int i = NextExistingNote; i != _note.GetLength(0) ; i++)
+        for (int i = NextExistingNote; i != _notes.GetLength(0) ; i++)
         {
-            Note n = _note[i];
+            Note note = _notes[i];
             // Считаем для каждой ноты из массива нот положение на экране
-            float noteYPosition = (-n.time + CurrentTime + (_skin.Position.y / ScrollSpeed)) * ScrollSpeed;
+            float noteYPosition = (-note.time + CurrentTime + (_skin.Position.y / ScrollSpeed)) * ScrollSpeed;
 
             // Прерываем рисовку нот если хоть одна нота уже за экраном
             // Потому что после неё уже все ноты будут за границей видимости
             if (noteYPosition < -_skin.NoteSize.y)
                 break; 
 
-            if (n.isExist != true)
+            if (note.isExist != true)
                 continue;
                      
             DrawTexture(
-                _skin.NoteImage[n.column],
+                _skin.NoteImage[note.column],
                 new Vector2(
-                    _skin.Position.x + (n.column * _skin.NoteSize.x),
+                    _skin.Position.x + (note.column * _skin.NoteSize.x),
                     noteYPosition)
             );
         }

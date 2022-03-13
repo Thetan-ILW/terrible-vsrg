@@ -15,22 +15,22 @@ public class NoteLogic
         _scoreSystem = scoreSystem;
     }
 
-    public void Process(ref Note[] note)
+    public void Process(ref Note[] notes)
     {
-        for (int i = NextExistingNote; i != note.GetLength(0) ; i++)
+        for (int i = NextExistingNote; i != notes.GetLength(0) ; i++)
         {
-            if (!note[i].isExist)
+            if (!notes[i].isExist)
                 continue;
 
-            if (note[i].time + _lateMiss < CurrentTime)
+            if (notes[i].time + _lateMiss < CurrentTime)
             {
                 _scoreSystem.ProcessMiss();
-                note[i].isExist = false;
-                if (i + 1 != note.GetLength(0))
+                notes[i].isExist = false;
+                if (i + 1 != notes.GetLength(0))
                     NextExistingNote = i + 1;
             }
 
-            if (note[i].isExist == true)
+            if (notes[i].isExist == true)
                 return;
         }
     }
