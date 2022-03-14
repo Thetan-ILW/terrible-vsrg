@@ -20,7 +20,7 @@ public class Skin
     public Vector2 AccuracyPosition;
     public string AccuracyFormat;
 
-    public Skin(SkinFabric.SkinSettings settings, SkinFabric sF, string skinFolder)
+    public Skin(SkinLoader.SkinSettings settings, SkinLoader sF, string skinFolder)
     {
         InputMode = settings.InputMode;
 
@@ -46,7 +46,7 @@ public class Skin
     }
 }
 
-public class SkinFabric
+public class SkinLoader
 {
     public struct SkinSettings
     {

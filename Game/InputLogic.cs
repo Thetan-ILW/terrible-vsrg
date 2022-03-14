@@ -73,23 +73,25 @@ public class EarlyInputLogic : InputLogic
 
         for (int i = NextExistingNote; i != notes.GetLength(0) ; i++)
         {
-            ref Note n = ref notes[i];
+            ref Note note = ref notes[i];
 
-            if (n.column != column)
+            if (!note.isExist)
+                continue;
+            
+            if (note.column != column)
                 continue;
 
-            earlyTime = n.time - 155;
-            lateTime = n.time + 155;
+            earlyTime = note.time - 155f;
+            lateTime = note.time + 155f;
 
             if (time < earlyTime)
                 return;    
 
             if (time > earlyTime && time < lateTime)
             {
-                deltaTime = n.time - time;
+                deltaTime = note.time - time;
                 _scoreSystem.ProcessHit(deltaTime);
-                n.isExist = false;
-                NextExistingNote = i + 1;
+                note.isExist = false;
                 return;
             }
         }
@@ -108,7 +110,79 @@ public class NearestInputLogic : InputLogic
     }
 
     public override void ProcessPress(int column, float time, ref Note[] notes)
+    {   // prototype
+        int earlyNoteIndex = GetEarlyNoteIndex(column, time, ref notes);
+        int lateNoteIndex = GetLateNoteIndex(column, time, ref notes);
+        
+        if (earlyNoteIndex != -1 && lateNoteIndex == -1) // Если ранняя нота есть, а поздней нет
+            CountNote(notes, earlyNoteIndex, time);
+
+        if (earlyNoteIndex == -1 && lateNoteIndex != -1) // Если поздняя нота есть, а ранней нет
+            CountNote(notes, lateNoteIndex, time);
+        
+        if (earlyNoteIndex != -1 && lateNoteIndex != -1) // Если обе ноты есть
+        {
+            if (notes[earlyNoteIndex].time - time < time - notes[lateNoteIndex].time)
+                CountNote(notes, earlyNoteIndex, time);
+            else
+                CountNote(notes, lateNoteIndex, time);
+        }
+    }
+
+    public int GetLateNoteIndex(int column, float time, ref Note[] notes)
     {
-       throw new NotImplementedException();
+        int index = -1; 
+        for (int i = NextExistingNote; i != notes.GetLength(0); i++)
+        {
+            Note note = notes[i];
+
+            if (!note.isExist)
+                continue;
+            
+            if (note.column != column)
+                continue;
+
+            if (note.time < time)
+            {
+                index = i;
+                continue;
+            }
+            else
+                return index;
+        }
+        return index;
+    }
+
+    public int GetEarlyNoteIndex(int column, float time, ref Note[] notes)
+    {
+        for (int i = NextExistingNote; i != notes.GetLength(0); i++)
+        {
+            Note note = notes[i];
+
+            if (!note.isExist)
+                continue;
+
+            if (note.column != column)
+                continue;
+
+            if (note.time > time)
+                return i;
+        }
+        return -1;
+    }
+
+    public void CountNote(Note[] notes, int noteIndex, float time)
+    {
+        float earlyTime = notes[noteIndex].time - 155f;
+        float lateTime = notes[noteIndex].time + 155f;
+        float deltaTime = 0;
+
+        if (time > earlyTime && time < lateTime)
+        {
+            deltaTime = notes[noteIndex].time - time;
+            _scoreSystem.ProcessHit(deltaTime);
+            notes[noteIndex].isExist = false;
+            return;
+        }
     }
 }

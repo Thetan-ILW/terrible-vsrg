@@ -15,6 +15,7 @@ public class Playfield : Node2D
     private InputLogic _inputLogic;
 
     private float _currentTime = -2_000f;
+    private float _addTime = 1000;
 
     public override void _Ready()
     {
@@ -27,8 +28,8 @@ public class Playfield : Node2D
             cg.DoMagic()
         );
 
-        SkinFabric skinFabric = new SkinFabric();
-        _skin = skinFabric.Build(_chart.inputMode, "Userdata/Skin/", "4k.json");
+        SkinLoader skinLoader = new SkinLoader();
+        _skin = skinLoader.Build(_chart.inputMode, "Userdata/Skin/", "4k.json");
 
         int[] inputMap = new int[4] {
             (int)KeyList.A,
@@ -42,7 +43,7 @@ public class Playfield : Node2D
 
         _scoreSystem = new ScoreSystem(_info);
         _noteLogic = new NoteLogic(_scoreSystem);
-        _inputLogic = new EarlyInputLogic(_chart.inputMode, _scoreSystem, inputMap);
+        _inputLogic = new NearestInputLogic(_chart.inputMode, _scoreSystem, inputMap);
 
         _gameLogic = new GameLogic(
             _noteLogic,
@@ -56,7 +57,7 @@ public class Playfield : Node2D
 
     public override void _Process(float delta)
     {  
-        _currentTime += (delta * 1000);
+        _currentTime += (delta * _addTime);
 
         _gameLogic.CurrentTime = _currentTime;
         _gameLogic.Process();
@@ -70,5 +71,7 @@ public class Playfield : Node2D
         _gameLogic.Input(input);
         if (Input.IsActionJustPressed("restart_chart"))
             GetTree().ReloadCurrentScene();
+        if (Input.IsActionJustPressed("test"))
+            _addTime = 0;
     }
 }
