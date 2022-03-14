@@ -1,6 +1,3 @@
-using Godot;
-using System;
-
 public class NoteLogic
 {
     private ScoreSystem _scoreSystem;

@@ -1,6 +1,4 @@
 using Godot;
-using System;
-using System.Diagnostics;
 
 public class Playfield : Node2D
 {

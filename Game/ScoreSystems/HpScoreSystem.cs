@@ -1,6 +1,3 @@
-using Godot;
-using System;
-
 public class HpScoreSystem : IScoreSystem
 {
     public float hp {get; private set;}

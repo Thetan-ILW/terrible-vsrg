@@ -1,6 +1,3 @@
-using Godot;
-using System;
-
 public class OsuScoreSystem : IScoreSystem
 {
     private struct TimingWindows
@@ -48,7 +45,7 @@ public class OsuScoreSystem : IScoreSystem
 
     public void ProcessHit(float deltaTime)
     {
-        GetJudge(Math.Abs(deltaTime));
+        GetJudge(System.Math.Abs(deltaTime));
         _jc.total++;
 
         float maxPoints = 300 * (_jc.marvelous + _jc.perfect);

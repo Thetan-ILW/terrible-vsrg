@@ -3,24 +3,6 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 
-public struct SkinSettings
-{
-    public int InputMode;
-
-    public float[] Position;
-    public float[] NoteSize;
-    public float[] KeySize;
-
-    public string[] NoteImage;
-    public string[] KeyImage;
-    public string[] KeyPressedImage;
-
-    public float[] ComboPosition;
-
-    public float[] AccuracyPosition;
-    public string AccuracyFormat;
-}
-
 public class Skin
 {
     public int InputMode;
@@ -38,7 +20,7 @@ public class Skin
     public Vector2 AccuracyPosition;
     public string AccuracyFormat;
 
-    public Skin(SkinSettings settings, SkinFabric sF, string skinFolder)
+    public Skin(SkinFabric.SkinSettings settings, SkinFabric sF, string skinFolder)
     {
         InputMode = settings.InputMode;
 
@@ -66,6 +48,24 @@ public class Skin
 
 public class SkinFabric
 {
+    public struct SkinSettings
+    {
+        public int InputMode;
+
+        public float[] Position;
+        public float[] NoteSize;
+        public float[] KeySize;
+
+        public string[] NoteImage;
+        public string[] KeyImage;
+        public string[] KeyPressedImage;
+
+        public float[] ComboPosition;
+
+        public float[] AccuracyPosition;
+        public string AccuracyFormat;
+    }
+
     public Skin Build(int inputMode, string skinFolder, string skinFile)
     {
         SkinSettings skinSettings;
