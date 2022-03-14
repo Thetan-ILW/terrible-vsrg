@@ -15,10 +15,6 @@ public class Playfield : Node2D
     private NoteLogic _noteLogic;
     private InputLogic _inputLogic;
 
-    private float _currentTime = -2_000f;
-    private float _addTime = 1000;
-    private bool _isPaused = false;
-
     public override void _Ready()
     {
         ChartGenerator cg = new ChartGenerator();
@@ -43,35 +39,37 @@ public class Playfield : Node2D
         _info = GetNode<Info>("Info");
         _conveyor = GetNode<Conveyor>("Conveyor");
 
-        _timeLogic = new TimeLogic(
-            _audio,
-            -2_000f,
-            1f
-        );
-        
         _scoreSystem = new ScoreSystem(_info);
         _noteLogic = new NoteLogic(_scoreSystem);
+
+        _timeLogic = new TimeLogic(
+            audio: _audio,
+            time: -2_000f,
+            timeRate: 1f,
+            afterPauseTimeDecrease: -750,
+            pauseCooldown: 5000
+        );
         
         _inputLogic = new NearestInputLogic(
-            _chart.inputMode, 
-            _scoreSystem, 
-            inputMap,
-            155f
+            inputMode: _chart.inputMode, 
+            scoreSystem: _scoreSystem, 
+            inputMap: inputMap,
+            hitWindow: 155f
         );
 
         _gameLogic = new GameLogic(
-            ref _chart.notes,
-            _timeLogic,
-            _noteLogic,
-            _inputLogic
+            notes: ref _chart.notes,
+            timeLogic: _timeLogic,
+            noteLogic: _noteLogic,
+            inputLogic: _inputLogic
         );
 
         _conveyor.Construct(
-            ref _chart.notes,
-            _skin,
-            _timeLogic,
-            _gameLogic,
-            1.3f
+            notes: ref _chart.notes,
+            skin: _skin,
+            timeLogic: _timeLogic,
+            gameLogic: _gameLogic,
+            scrollSpeed: 1.3f
         );
 
         _info.Construct(_skin, _scoreSystem);
