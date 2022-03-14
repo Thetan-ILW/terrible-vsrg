@@ -16,6 +16,7 @@ public class Playfield : Node2D
 
     private float _currentTime = -2_000f;
     private float _addTime = 1000;
+    private bool _isPaused = false;
 
     public override void _Ready()
     {
@@ -43,7 +44,13 @@ public class Playfield : Node2D
 
         _scoreSystem = new ScoreSystem(_info);
         _noteLogic = new NoteLogic(_scoreSystem);
-        _inputLogic = new NearestInputLogic(_chart.inputMode, _scoreSystem, inputMap);
+        
+        _inputLogic = new NearestInputLogic(
+            _chart.inputMode, 
+            _scoreSystem, 
+            inputMap,
+            155f
+        );
 
         _gameLogic = new GameLogic(
             _noteLogic,
@@ -69,9 +76,23 @@ public class Playfield : Node2D
     public override void _Input(InputEvent input)
     {
         _gameLogic.Input(input);
+
         if (Input.IsActionJustPressed("restart_chart"))
             GetTree().ReloadCurrentScene();
-        if (Input.IsActionJustPressed("test"))
-            _addTime = 0;
+
+        if (Input.IsActionJustPressed("pause"))
+        {
+            if (!_isPaused)
+            {
+                _addTime = 0;
+                _isPaused = true;
+            }
+            else
+            {
+                _addTime = 1000;
+                _currentTime -= 1000; // legal cheats :)
+                _isPaused = false;
+            }
+        }
     }
 }
