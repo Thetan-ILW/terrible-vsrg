@@ -4,22 +4,32 @@ public class Conveyor : Node2D
 {
     private Skin _skin;
     private Note[] _notes; // тут ссылка на ноты если чё
-    private InputLogic _inputLogic;
+    private TimeLogic _timeLogic;
+    private GameLogic _gameLogic;
+
+    private float _currentTime = 0;
+    private int _nextExistingNote = 0;
+    private bool[] _keyState;
 
     public float ScrollSpeed = 0;
-    public float CurrentTime = 0;
-    public int NextExistingNote = 0;
 
-    public void Construct(ref Note[] notes, Skin skin, InputLogic inputLogic, float scrollSpeed)
+    public void Construct(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed)
     {
         _notes = notes;
         _skin = skin;
-        _inputLogic = inputLogic;
+        _timeLogic = timeLogic;
+        _gameLogic = gameLogic;
+
+        _keyState = _gameLogic.KeyState;
+
         ScrollSpeed = scrollSpeed;
     }
 
     public override void _Process(float delta)
     {
+        _currentTime = _timeLogic.CurrentTime;
+        _nextExistingNote = _gameLogic.NextExistingNote;
+        _keyState = _gameLogic.KeyState;
         Update();
     }
 
@@ -27,11 +37,11 @@ public class Conveyor : Node2D
     {
         // Notes
         // Начинаем рисовать с самой ранней существующей ноты 
-        for (int i = NextExistingNote; i != _notes.GetLength(0) ; i++)
+        for (int i = _nextExistingNote; i != _notes.GetLength(0) ; i++)
         {
             Note note = _notes[i];
             // Считаем для каждой ноты из массива нот положение на экране
-            float noteYPosition = (-note.time + CurrentTime + (_skin.Position.y / ScrollSpeed)) * ScrollSpeed;
+            float noteYPosition = (-note.time + _currentTime + (_skin.Position.y / ScrollSpeed)) * ScrollSpeed;
 
             // Прерываем рисовку нот если хоть одна нота уже за экраном
             // Потому что после неё уже все ноты будут за границей видимости
@@ -52,7 +62,7 @@ public class Conveyor : Node2D
         // Keys
         for (int i = 0; i != _skin.InputMode; i++)
         {
-            if (_inputLogic.KeyState[i] != false)
+            if (_keyState[i] != false)
                 continue;
 
             DrawTexture(
@@ -67,7 +77,7 @@ public class Conveyor : Node2D
         //Pressed keys
         for (int i = 0; i != _skin.InputMode; i++)
         {
-            if (_inputLogic.KeyState[i] != true)
+            if (_keyState[i] != true)
                 continue;
             
             DrawTexture(

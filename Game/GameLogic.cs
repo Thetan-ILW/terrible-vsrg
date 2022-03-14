@@ -38,6 +38,7 @@ public struct Chart
 
 public class GameLogic
 {
+    private TimeLogic _timeLogic;
     private NoteLogic _noteLogic;
     private InputLogic _inputLogic;
 
@@ -45,17 +46,22 @@ public class GameLogic
 
     public float CurrentTime = 0;
     public int NextExistingNote = 0;
+    public bool[] KeyState;
 
-    public GameLogic(NoteLogic noteLogic, InputLogic inputLogic, ref Note[] notes)
+    public GameLogic(ref Note[] notes, TimeLogic timeLogic, NoteLogic noteLogic, InputLogic inputLogic)
     {
+        _notes = notes;
+        _timeLogic = timeLogic;
         _noteLogic = noteLogic;
         _inputLogic = inputLogic;
-        _notes = notes;
+
+        CurrentTime = _timeLogic.CurrentTime;
+        KeyState = _inputLogic.KeyState;
     }
 
     public void Process()
     {
-        _noteLogic.CurrentTime = CurrentTime;
+        _noteLogic.CurrentTime = _timeLogic.CurrentTime;
         _noteLogic.NextExistingNote = NextExistingNote;
 
         _noteLogic.Process(ref _notes);
@@ -66,10 +72,11 @@ public class GameLogic
     {
         if (input is InputEventKey keyEvent)
         {
-            _inputLogic.CurrentTime = CurrentTime;
+            _inputLogic.CurrentTime = _timeLogic.CurrentTime;
             _inputLogic.NextExistingNote = NextExistingNote;
 
             _inputLogic.Process(keyEvent, ref _notes);
+            KeyState = _inputLogic.KeyState;
             GetNextExistingNote();
         }
     }

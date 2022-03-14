@@ -10,6 +10,7 @@ public class Playfield : Node2D
     private Audio _audio;
 
     private GameLogic _gameLogic;
+    private TimeLogic _timeLogic;
     private ScoreSystem _scoreSystem;
     private NoteLogic _noteLogic;
     private InputLogic _inputLogic;
@@ -42,6 +43,12 @@ public class Playfield : Node2D
         _info = GetNode<Info>("Info");
         _conveyor = GetNode<Conveyor>("Conveyor");
 
+        _timeLogic = new TimeLogic(
+            _audio,
+            -2_000f,
+            1f
+        );
+        
         _scoreSystem = new ScoreSystem(_info);
         _noteLogic = new NoteLogic(_scoreSystem);
         
@@ -53,24 +60,27 @@ public class Playfield : Node2D
         );
 
         _gameLogic = new GameLogic(
+            ref _chart.notes,
+            _timeLogic,
             _noteLogic,
-            _inputLogic,
-            ref _chart.notes
+            _inputLogic
         );
 
-        _conveyor.Construct(ref _chart.notes, _skin, _inputLogic, 1.3f);
+        _conveyor.Construct(
+            ref _chart.notes,
+            _skin,
+            _timeLogic,
+            _gameLogic,
+            1.3f
+        );
+
         _info.Construct(_skin, _scoreSystem);
     }
 
     public override void _Process(float delta)
     {  
-        _currentTime += (delta * _addTime);
-
-        _gameLogic.CurrentTime = _currentTime;
+        _timeLogic.Process(delta);
         _gameLogic.Process();
-
-        _conveyor.CurrentTime = _currentTime;
-        _conveyor.NextExistingNote = _gameLogic.NextExistingNote;
     }
 
     public override void _Input(InputEvent input)
@@ -82,17 +92,7 @@ public class Playfield : Node2D
 
         if (Input.IsActionJustPressed("pause"))
         {
-            if (!_isPaused)
-            {
-                _addTime = 0;
-                _isPaused = true;
-            }
-            else
-            {
-                _addTime = 1000;
-                _currentTime -= 1000; // legal cheats :)
-                _isPaused = false;
-            }
+            _timeLogic.SetPause();
         }
     }
 }

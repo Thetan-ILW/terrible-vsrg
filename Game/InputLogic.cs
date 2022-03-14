@@ -114,7 +114,7 @@ public class NearestInputLogic : InputLogic
     }
 
     public override void ProcessPress(int column, float time, ref Note[] notes)
-    {   // prototype
+    {   
         int earlyNoteIndex = GetEarlyNoteIndex(column, time, ref notes);
         int lateNoteIndex = GetLateNoteIndex(column, time, ref notes);
          
