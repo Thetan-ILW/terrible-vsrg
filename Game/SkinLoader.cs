@@ -22,6 +22,7 @@ public class Skin
 
     public Texture[] JudgeImage;
     public Rect2 JudgeRect;
+    public Vector2 ErrorBarPosition;
 
     public Skin(SkinLoader.SkinSettings settings, SkinLoader skinLoader, string skinFolder)
     {
@@ -61,6 +62,8 @@ public class Skin
             JudgeImage[0].GetSize().x * judgeScale.x,
             JudgeImage[0].GetSize().y * judgeScale.y
         );
+
+        ErrorBarPosition = skinLoader.ArrToVec(settings.ErrorBarPosition);
     }
 }
 
@@ -86,6 +89,8 @@ public class SkinLoader
         public string[] JudgeImage;
         public float[] JudgePosition;
         public float[] JudgeScale;
+
+        public float[] ErrorBarPosition;
     }
 
     public Skin Build(int inputMode, string skinFolder, string skinFile)

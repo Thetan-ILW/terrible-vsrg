@@ -13,6 +13,7 @@ public class Info : Node2D
     private DrawableText _comboText;
 
     private JudgeDrawable _judgeDrawable;
+    private ErrorBar _errorBar;
 
     public void Construct(Skin skin, ScoreSystem scoreSystem)
     {
@@ -43,6 +44,11 @@ public class Info : Node2D
             skin.JudgeRect
         );
 
+        _errorBar = new ErrorBar(
+            skin.ErrorBarPosition,
+            10
+        );
+
         UpdateValues();
     }
 
@@ -55,6 +61,7 @@ public class Info : Node2D
 
         _comboText.Text = _base.Combo.ToString();
         _judgeDrawable.Update(_judge.LastJudge);
+        _errorBar.Update(_base.LastDelta, _judge.LastJudge);
 
         Update();
     }
@@ -64,5 +71,6 @@ public class Info : Node2D
         _accuracyText.Draw(this);
         _comboText.Draw(this);
         _judgeDrawable.Draw(this);
+        _errorBar.Draw(this);
     }
 }
