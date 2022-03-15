@@ -1,6 +1,6 @@
 using Godot;
 
-public class DrawableText : Drawable
+public class DrawableText : IDrawable
 {
     private DynamicFont _font;
     private Vector2 _position;

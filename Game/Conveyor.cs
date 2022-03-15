@@ -9,7 +9,6 @@ public class Conveyor : Node2D
 
     private DrawableNotes _drawableNotes;
     private DrawableKeys _drawableKeys;
-    private DrawablePressedKeys _drawablePressedKeys;
 
     private float _currentTime = 0;
     private int _nextExistingNote = 0;
@@ -23,14 +22,28 @@ public class Conveyor : Node2D
         _skin = skin;
         _timeLogic = timeLogic;
         _gameLogic = gameLogic;
-
-        _drawableNotes = new DrawableNotes();
-        _drawableKeys = new DrawableKeys();
-        _drawablePressedKeys = new DrawablePressedKeys();
-
         _keyState = _gameLogic.KeyState;
-
         ScrollSpeed = scrollSpeed;
+
+        _drawableNotes = new DrawableNotes(
+            ref _notes,
+            _skin
+        );
+
+        _drawableKeys = new DrawableKeys(
+            _skin
+        );
+
+        _drawableNotes.Update(
+            _nextExistingNote,
+            _currentTime,
+            ScrollSpeed
+        );
+
+        _drawableKeys.Update(
+            _keyState
+        );
+
     }
 
     public override void _Process(float delta)
@@ -38,30 +51,23 @@ public class Conveyor : Node2D
         _currentTime = _timeLogic.CurrentTime;
         _nextExistingNote = _gameLogic.NextExistingNote;
         _keyState = _gameLogic.KeyState;
-        Update();
-    }
 
-    public override void _Draw()
-    {
-        _drawableNotes.Draw(
-            this,
-            _notes,
-            _skin,
+        _drawableNotes.Update(
             _nextExistingNote,
             _currentTime,
             ScrollSpeed
         );
 
-        _drawableKeys.Draw(
-            this,
-            _skin,
+        _drawableKeys.Update(
             _keyState
         );
 
-        _drawablePressedKeys.Draw(
-            this,
-            _skin,
-            _keyState
-        );
+        Update();
+    }
+
+    public override void _Draw()
+    {
+        _drawableNotes.Draw(this);
+        _drawableKeys.Draw(this);
     }
 }

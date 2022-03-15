@@ -1,5 +1,5 @@
 using Godot;
-public class JudgeDrawable : Drawable
+public class JudgeDrawable : IDrawable
 {
 
     private Texture _maxTexture;

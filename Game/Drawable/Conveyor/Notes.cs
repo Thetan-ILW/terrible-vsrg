@@ -1,25 +1,45 @@
-public class DrawableNotes : Drawable
+public class DrawableNotes : IDrawable
 {
-    public void Draw(Godot.Node2D node, Note[] notes, Skin skin, int nextExistingNote, float currentTime, float scrollSpeed)
+    private Note[] _notes;
+    private Skin _skin;
+
+    private int _nextExistingNote;
+    private float _currentTime;
+    private float _scrollSpeed; 
+
+    public DrawableNotes(ref Note[] notes, Skin skin)
     {
-        for (int i = nextExistingNote; i != notes.GetLength(0) ; i++)
+        _notes = notes;
+        _skin = skin;
+    }
+
+    public void Update(int nextExistingNote, float currentTime, float scrollSpeed)
+    {
+        _nextExistingNote = nextExistingNote;
+        _currentTime = currentTime;
+        _scrollSpeed = scrollSpeed;
+    }
+
+    public void Draw(Godot.Node2D node)
+    {
+        for (int i = _nextExistingNote; i != _notes.GetLength(0) ; i++)
         {
-            Note note = notes[i];
+            Note note = _notes[i];
             // Считаем для каждой ноты из массива нот положение на экране
-            float noteYPosition = (-note.Time + currentTime + (skin.Position.y / scrollSpeed)) * scrollSpeed;
+            float noteYPosition = (-note.Time + _currentTime + (_skin.Position.y / _scrollSpeed)) * _scrollSpeed;
 
             // Прерываем рисовку нот если хоть одна нота уже за экраном
             // Потому что после неё уже все ноты будут за границей видимости
-            if (noteYPosition < -skin.NoteSize.y)
+            if (noteYPosition < -_skin.NoteSize.y)
                 break; 
 
             if (note.IsExist != true)
                 continue;
                      
             node.DrawTexture(
-                skin.NoteImage[note.Column],
+                _skin.NoteImage[note.Column],
                 new Godot.Vector2(
-                    skin.Position.x + (note.Column * skin.NoteSize.x),
+                    _skin.Position.x + (note.Column * _skin.NoteSize.x),
                     noteYPosition)
             );
         }
