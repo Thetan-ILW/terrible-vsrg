@@ -8,31 +8,38 @@ public class JudgeDrawable : IDrawable
     private Texture _missTexture;
 
     private Texture _currentTexture;
-    private Vector2 _position;
+    private Rect2 _rect;
 
-    public JudgeDrawable(Texture maxTexture, Texture goodTexture, Texture badTexture, Texture missTexture, Vector2 position)
+    public JudgeDrawable(Texture maxTexture, Texture goodTexture, Texture badTexture, Texture missTexture, Rect2 rect)
     {
         _maxTexture = maxTexture;
         _goodTexture = goodTexture;
         _badTexture = badTexture;
         _missTexture = missTexture;
-        _position = position;
+        _rect = rect;
     }
 
     public void Update(JudgeScoreSystem.JudgeName judgeName)
     {
-        if (judgeName == JudgeScoreSystem.JudgeName.Max)
-            _currentTexture = _maxTexture;
-        else if (judgeName == JudgeScoreSystem.JudgeName.Good)
-            _currentTexture = _goodTexture;
-        else if (judgeName == JudgeScoreSystem.JudgeName.Bad)
-            _currentTexture = _badTexture;
-        else if (judgeName == JudgeScoreSystem.JudgeName.Miss)
-            _currentTexture = _missTexture;
+        switch (judgeName)
+        {
+            case JudgeScoreSystem.JudgeName.Max:
+                _currentTexture = _maxTexture;
+                break;
+            case JudgeScoreSystem.JudgeName.Good:
+                _currentTexture = _goodTexture;
+                break;
+            case JudgeScoreSystem.JudgeName.Bad:
+                _currentTexture = _badTexture;
+                break;
+            case JudgeScoreSystem.JudgeName.Miss:
+                _currentTexture = _missTexture;
+                break;
+        }
     }
 
     public void Draw(Godot.Node2D node)
     {
-        node.DrawTexture(_currentTexture, _position);
+        node.DrawTextureRect(_currentTexture, _rect, false);
     }
 }

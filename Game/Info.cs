@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 public class Info : Node2D
@@ -41,7 +40,7 @@ public class Info : Node2D
             skin.JudgeImage[1],
             skin.JudgeImage[2],
             skin.JudgeImage[3],
-            new Vector2(450, 350)
+            skin.JudgeRect
         );
 
         UpdateValues();

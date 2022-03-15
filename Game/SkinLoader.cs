@@ -1,6 +1,6 @@
-using Godot;
 using System;
 using System.IO;
+using Godot;
 using Newtonsoft.Json;
 
 public class Skin
@@ -21,14 +21,15 @@ public class Skin
     public string AccuracyFormat;
 
     public Texture[] JudgeImage;
+    public Rect2 JudgeRect;
 
-    public Skin(SkinLoader.SkinSettings settings, SkinLoader sF, string skinFolder)
+    public Skin(SkinLoader.SkinSettings settings, SkinLoader skinLoader, string skinFolder)
     {
         InputMode = settings.InputMode;
 
-        Position = sF.ArrToVec(settings.Position);
-        NoteSize = sF.ArrToVec(settings.NoteSize);
-        KeySize = sF.ArrToVec(settings.KeySize);
+        Position = skinLoader.ArrToVec(settings.Position);
+        NoteSize = skinLoader.ArrToVec(settings.NoteSize);
+        KeySize = skinLoader.ArrToVec(settings.KeySize);
 
         NoteImage = new Texture[settings.InputMode];
         KeyImage = new Texture[settings.InputMode];
@@ -36,22 +37,30 @@ public class Skin
 
         for (int i = 0; i != InputMode; i++)
         {
-            sF.LoadImage(skinFolder, settings.NoteImage, NoteImage, i);
-            sF.LoadImage(skinFolder, settings.KeyImage, KeyImage, i);
-            sF.LoadImage(skinFolder, settings.KeyPressedImage, KeyPressedImage, i);
+            skinLoader.LoadImage(skinFolder, settings.NoteImage, NoteImage, i);
+            skinLoader.LoadImage(skinFolder, settings.KeyImage, KeyImage, i);
+            skinLoader.LoadImage(skinFolder, settings.KeyPressedImage, KeyPressedImage, i);
         }
 
-        ComboPosition = sF.ArrToVec(settings.ComboPosition);
+        ComboPosition = skinLoader.ArrToVec(settings.ComboPosition);
         
-        AccuracyPosition = sF.ArrToVec(settings.AccuracyPosition);
+        AccuracyPosition = skinLoader.ArrToVec(settings.AccuracyPosition);
         AccuracyFormat = settings.AccuracyFormat;
 
-        JudgeImage = new Texture[settings.judgeImage.GetLength(0)];
+        JudgeImage = new Texture[settings.JudgeImage.GetLength(0)];
 
-        for (int i = 0; i != settings.judgeImage.GetLength(0); i++)
+        for (int i = 0; i != settings.JudgeImage.GetLength(0); i++)
         {
-            sF.LoadImage(skinFolder, settings.judgeImage, JudgeImage, i);
+            skinLoader.LoadImage(skinFolder, settings.JudgeImage, JudgeImage, i);
         }
+
+        Vector2 judgePosition = skinLoader.ArrToVec(settings.JudgePosition);
+        Vector2 judgeScale = skinLoader.ArrToVec(settings.JudgeScale);
+        JudgeRect = new Rect2(
+            judgePosition,
+            JudgeImage[0].GetSize().x * judgeScale.x,
+            JudgeImage[0].GetSize().y * judgeScale.y
+        );
     }
 }
 
@@ -74,7 +83,9 @@ public class SkinLoader
         public float[] AccuracyPosition;
         public string AccuracyFormat;
 
-        public string[] judgeImage;
+        public string[] JudgeImage;
+        public float[] JudgePosition;
+        public float[] JudgeScale;
     }
 
     public Skin Build(int inputMode, string skinFolder, string skinFile)
@@ -101,7 +112,7 @@ public class SkinLoader
     }
 
     public void LoadImage(string skinFolder, string[] namesArray, Texture[] imageArray, int index) 
-    {   //Тут грузим только ноты, кнопки, нажатые кнопки, хз какое название этой группы
+    {   
         ImageTexture image = new ImageTexture();
         image.Load(skinFolder + namesArray[index]);
         imageArray[index] = image;
