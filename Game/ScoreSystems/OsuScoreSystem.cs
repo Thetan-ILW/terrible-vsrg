@@ -2,32 +2,32 @@ public class OsuScoreSystem : IScoreSystem
 {
     private struct TimingWindows
     {
-        public float marvelous;
-        public float perfect;
-        public float great;
-        public float good;
-        public float bad;
+        public float Marvelous;
+        public float Perfect;
+        public float Great;
+        public float Good;
+        public float Bad;
 
         public TimingWindows(int od)
         {
             float odDecrease = 3 * od;
 
-            marvelous = 16.5f;
-            perfect = 64.5f - odDecrease;
-            great = 97.5f - odDecrease;
-            good = 127.5f - odDecrease;
-            bad = 151.5f - odDecrease;
+            Marvelous = 16.5f;
+            Perfect = 64.5f - odDecrease;
+            Great = 97.5f - odDecrease;
+            Good = 127.5f - odDecrease;
+            Bad = 151.5f - odDecrease;
         }
     }
 
     private struct JudgeCount
     {
-        public int marvelous;
-        public int perfect;
-        public int great;
-        public int good;
-        public int bad;
-        public int total;
+        public int Marvelous;
+        public int Perfect;
+        public int Great;
+        public int Good;
+        public int Bad;
+        public int Total;
     }
 
     TimingWindows _tw;
@@ -46,28 +46,29 @@ public class OsuScoreSystem : IScoreSystem
     public void ProcessHit(float deltaTime)
     {
         GetJudge(System.Math.Abs(deltaTime));
-        _jc.total++;
+        _jc.Total++;
 
-        float maxPoints = 300 * (_jc.marvelous + _jc.perfect);
-        float greatPoins = 200 * _jc.great;
-        float goodPoints = 100 * _jc.good;
-        float badPoints = 50 * _jc.bad;
-        float totalPoints = 300 * _jc.total;
+        float maxPoints = 300 * (_jc.Marvelous + _jc.Perfect);
+        float greatPoins = 200 * _jc.Great;
+        float goodPoints = 100 * _jc.Good;
+        float badPoints = 50 * _jc.Bad;
+        float totalPoints = 300 * _jc.Total;
 
         Accuracy = (badPoints + goodPoints + greatPoins + maxPoints) / totalPoints;
     }
 
     public void ProcessMiss()
     {
-        _jc.total++;
+        _jc.Total++;
     }
 
     private void GetJudge(float deltaTime)
     {
-        if (deltaTime <= _tw.marvelous) {_jc.marvelous++; return;}
-        if (deltaTime <= _tw.perfect) {_jc.perfect++; return;}
-        if (deltaTime <= _tw.great) {_jc.great++; return;}
-        if (deltaTime <= _tw.good) {_jc.good++; return;}
-        if (deltaTime <= _tw.bad) {_jc.bad++; return;}
+        if (deltaTime <= _tw.Marvelous) {_jc.Marvelous++; return;}
+        if (deltaTime <= _tw.Perfect) {_jc.Perfect++; return;}
+        if (deltaTime <= _tw.Great) {_jc.Great++; return;}
+        if (deltaTime <= _tw.Good) {_jc.Good++; return;}
+        if (deltaTime <= _tw.Bad) {_jc.Bad++; return;}
+        // else miss++
     }
 }

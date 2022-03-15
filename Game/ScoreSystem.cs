@@ -19,7 +19,20 @@ public class ScoreSystem
             {"Base", new BaseScoreSystem()},
             {"Osu", new OsuScoreSystem(8)},
             {"Wife", new WifeScoreSystem(1)},
-            {"Hp", new HpScoreSystem(1, 0.05f, 0.1f)}
+
+            {"Hp", new HpScoreSystem(
+                hp: 1,
+                hpIncrease: 0.05f, 
+                hpDecrease: 0.1f
+                )
+            },
+
+            {"Judge", new JudgeScoreSystem(
+                maxWindow: 18f,
+                goodWindow: 35f,
+                badWindow: 155f
+                )
+            }
         };
 
         _info = info;

@@ -47,5 +47,12 @@
         5
     ],
     
-    "accuracyFormat": "{0:P2}"
+    "accuracyFormat": "{0:P2}",
+
+    "judgeImage": [
+        "judges/max.png",
+        "judges/good.png",
+        "judges/bad.png",
+        "judges/miss.png"
+    ]
 }

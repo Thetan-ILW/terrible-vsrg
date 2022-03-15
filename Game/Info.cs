@@ -8,9 +8,12 @@ public class Info : Node2D
     private ScoreSystem _scoreSystem;
     private BaseScoreSystem _base;
     private WifeScoreSystem _wife;
+    private JudgeScoreSystem _judge;
 
     private DrawableText _accuracyText;
     private DrawableText _comboText;
+
+    private JudgeDrawable _judgeDrawable;
 
     public void Construct(Skin skin, ScoreSystem scoreSystem)
     {
@@ -19,6 +22,7 @@ public class Info : Node2D
         _scoreSystem = scoreSystem;
         _base = (BaseScoreSystem)_scoreSystem.Container["Base"];
         _wife = (WifeScoreSystem)_scoreSystem.Container["Wife"];
+        _judge = (JudgeScoreSystem)_scoreSystem.Container["Judge"];
 
         _accuracyText = new DrawableText(
             "res://Assets/Roboto-Light.ttf",
@@ -32,6 +36,14 @@ public class Info : Node2D
             new Vector2(612, 300)
         );
 
+        _judgeDrawable = new JudgeDrawable(
+            skin.JudgeImage[0],
+            skin.JudgeImage[1],
+            skin.JudgeImage[2],
+            skin.JudgeImage[3],
+            new Vector2(450, 350)
+        );
+
         UpdateValues();
     }
 
@@ -43,6 +55,7 @@ public class Info : Node2D
         );
 
         _comboText.Text = _base.Combo.ToString();
+        _judgeDrawable.Update(_judge.LastJudge);
 
         Update();
     }
@@ -51,5 +64,6 @@ public class Info : Node2D
     {
         _accuracyText.Draw(this);
         _comboText.Draw(this);
+        _judgeDrawable.Draw(this);
     }
 }

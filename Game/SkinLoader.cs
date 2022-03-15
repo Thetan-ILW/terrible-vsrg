@@ -20,6 +20,8 @@ public class Skin
     public Vector2 AccuracyPosition;
     public string AccuracyFormat;
 
+    public Texture[] JudgeImage;
+
     public Skin(SkinLoader.SkinSettings settings, SkinLoader sF, string skinFolder)
     {
         InputMode = settings.InputMode;
@@ -43,6 +45,13 @@ public class Skin
         
         AccuracyPosition = sF.ArrToVec(settings.AccuracyPosition);
         AccuracyFormat = settings.AccuracyFormat;
+
+        JudgeImage = new Texture[settings.judgeImage.GetLength(0)];
+
+        for (int i = 0; i != settings.judgeImage.GetLength(0); i++)
+        {
+            sF.LoadImage(skinFolder, settings.judgeImage, JudgeImage, i);
+        }
     }
 }
 
@@ -64,6 +73,8 @@ public class SkinLoader
 
         public float[] AccuracyPosition;
         public string AccuracyFormat;
+
+        public string[] judgeImage;
     }
 
     public Skin Build(int inputMode, string skinFolder, string skinFile)

@@ -7,7 +7,7 @@ public class ChartGenerator
         Random rnd = new Random();
 
         int noteCount = 1000;
-        float bpm = 140;
+        float bpm = 80;
         float timeMs = (60000 / bpm) / 4;
         Note[] notes = new Note[noteCount];
 
