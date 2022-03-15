@@ -7,6 +7,10 @@ public class Conveyor : Node2D
     private TimeLogic _timeLogic;
     private GameLogic _gameLogic;
 
+    private DrawableNotes _drawableNotes;
+    private DrawableKeys _drawableKeys;
+    private DrawablePressedKeys _drawablePressedKeys;
+
     private float _currentTime = 0;
     private int _nextExistingNote = 0;
     private bool[] _keyState;
@@ -19,6 +23,10 @@ public class Conveyor : Node2D
         _skin = skin;
         _timeLogic = timeLogic;
         _gameLogic = gameLogic;
+
+        _drawableNotes = new DrawableNotes();
+        _drawableKeys = new DrawableKeys();
+        _drawablePressedKeys = new DrawablePressedKeys();
 
         _keyState = _gameLogic.KeyState;
 
@@ -35,58 +43,25 @@ public class Conveyor : Node2D
 
     public override void _Draw()
     {
-        // Notes
-        // Начинаем рисовать с самой ранней существующей ноты 
-        for (int i = _nextExistingNote; i != _notes.GetLength(0) ; i++)
-        {
-            Note note = _notes[i];
-            // Считаем для каждой ноты из массива нот положение на экране
-            float noteYPosition = (-note.Time + _currentTime + (_skin.Position.y / ScrollSpeed)) * ScrollSpeed;
+        _drawableNotes.Draw(
+            this,
+            _notes,
+            _skin,
+            _nextExistingNote,
+            _currentTime,
+            ScrollSpeed
+        );
 
-            // Прерываем рисовку нот если хоть одна нота уже за экраном
-            // Потому что после неё уже все ноты будут за границей видимости
-            if (noteYPosition < -_skin.NoteSize.y)
-                break; 
+        _drawableKeys.Draw(
+            this,
+            _skin,
+            _keyState
+        );
 
-            if (note.IsExist != true)
-                continue;
-                     
-            DrawTexture(
-                _skin.NoteImage[note.Column],
-                new Vector2(
-                    _skin.Position.x + (note.Column * _skin.NoteSize.x),
-                    noteYPosition)
-            );
-        }
-
-        // Keys
-        for (int i = 0; i != _skin.InputMode; i++)
-        {
-            if (_keyState[i] != false)
-                continue;
-
-            DrawTexture(
-                _skin.KeyImage[i],
-                new Vector2(
-                    _skin.Position.x + (i * _skin.NoteSize.x),
-                    _skin.Position.y
-                )
-            );
-        }
-
-        //Pressed keys
-        for (int i = 0; i != _skin.InputMode; i++)
-        {
-            if (_keyState[i] != true)
-                continue;
-            
-            DrawTexture(
-                _skin.KeyPressedImage[i],
-                new Vector2(
-                    _skin.Position.x + (i * _skin.NoteSize.x),
-                    _skin.Position.y
-                )
-            );
-        }
+        _drawablePressedKeys.Draw(
+            this,
+            _skin,
+            _keyState
+        );
     }
 }

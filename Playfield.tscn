@@ -1,14 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Game/Playfield.cs" type="Script" id=1]
 [ext_resource path="res://Game/Conveyor.cs" type="Script" id=2]
-[ext_resource path="res://Assets/Roboto-Light.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://Game/Info.cs" type="Script" id=4]
 [ext_resource path="res://Game/Audio.cs" type="Script" id=5]
-
-[sub_resource type="DynamicFont" id=1]
-size = 30
-font_data = ExtResource( 3 )
 
 [node name="Playfield" type="Node2D"]
 script = ExtResource( 1 )
@@ -18,24 +13,6 @@ script = ExtResource( 2 )
 
 [node name="Info" type="Node2D" parent="."]
 script = ExtResource( 4 )
-
-[node name="ComboCount" type="RichTextLabel" parent="Info"]
-anchor_right = 1.0
-margin_left = 594.0
-margin_top = 268.0
-margin_right = 790.0
-margin_bottom = 307.0
-rect_pivot_offset = Vector2( 15, -6 )
-custom_fonts/normal_font = SubResource( 1 )
-text = "0"
-
-[node name="Accuracy" type="RichTextLabel" parent="Info"]
-anchor_right = 1.0
-margin_right = 162.0
-margin_bottom = 39.0
-rect_pivot_offset = Vector2( 15, -6 )
-custom_fonts/normal_font = SubResource( 1 )
-text = "0"
 
 [node name="Audio" type="AudioStreamPlayer2D" parent="."]
 script = ExtResource( 5 )

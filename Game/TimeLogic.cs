@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class TimeLogic : Node
+public class TimeLogic
 {
     private Audio _audio;
 

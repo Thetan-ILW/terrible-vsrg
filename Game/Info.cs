@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public class Info : Node2D
@@ -8,8 +9,8 @@ public class Info : Node2D
     private BaseScoreSystem _base;
     private WifeScoreSystem _wife;
 
-    private RichTextLabel _comboCount;
-    private RichTextLabel _accuracy;
+    private DrawableText _accuracyText;
+    private DrawableText _comboText;
 
     public void Construct(Skin skin, ScoreSystem scoreSystem)
     {
@@ -19,19 +20,36 @@ public class Info : Node2D
         _base = (BaseScoreSystem)_scoreSystem.Container["Base"];
         _wife = (WifeScoreSystem)_scoreSystem.Container["Wife"];
 
-        _comboCount = GetNode<RichTextLabel>("ComboCount");
-        _accuracy = GetNode<RichTextLabel>("Accuracy");
+        _accuracyText = new DrawableText(
+            "res://Assets/Roboto-Light.ttf",
+            48,
+            new Vector2(5, 40)
+        );
 
-        _comboCount.SetPosition(skin.ComboPosition);
+        _comboText = new DrawableText(
+            "res://Assets/Roboto-Light.ttf",
+            48,
+            new Vector2(612, 300)
+        );
+
         UpdateValues();
     }
 
     public void UpdateValues()
     {
-        _comboCount.Text = _base.Combo.ToString();
-        _accuracy.Text = string.Format(
+        _accuracyText.Text = string.Format(
             _skin.AccuracyFormat,
             _wife.Accuracy
         );
+
+        _comboText.Text = _base.Combo.ToString();
+
+        Update();
+    }
+
+    public override void _Draw()
+    {
+        _accuracyText.Draw(this);
+        _comboText.Draw(this);
     }
 }
