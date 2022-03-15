@@ -2,37 +2,37 @@ using Godot;
 
 public struct Note 
 {
-    public float time;
-    public int column;
-    public bool isLongNote;
-    public float length;
-    public bool isExist;
+    public int Column { get; private set; }
+    public float Time { get; private set; }
+    public float Length { get; private set; }
+    public bool IsLongNote { get; private set; }
+    public bool IsExist { get; set; }
 
     public Note(float time, int column, bool isLongNote, float length)
     {
-        this.time = time;
-        this.column = column;
-        this.isLongNote = isLongNote;
-        this.length = length;
-        isExist = true;
+        Column = column;
+        Time = time;
+        Length = length;
+        IsLongNote = isLongNote;
+        IsExist = true;
     }
 }
 
 public struct Chart
 {
-    public string artist;
-    public string title;
-    public string difficulty;
-    public int inputMode; // сделай их константами браток
-    public Note[] notes;
+    public string Artist { get; private set; }
+    public string Title { get; private set; }
+    public string Difficulty { get; private set; }
+    public int InputMode { get; private set; }
+    public Note[] Notes;
 
     public Chart(string artist, string title, string difficulty, int inputMode, Note[] notes)
     {
-        this.artist = artist;
-        this.title = title;
-        this.difficulty = difficulty;
-        this.inputMode = inputMode;
-        this.notes = notes;
+        this.Artist = artist;
+        this.Title = title;
+        this.Difficulty = difficulty;
+        this.InputMode = inputMode;
+        this.Notes = notes;
     }
 }
 
@@ -44,9 +44,9 @@ public class GameLogic
 
     private Note[] _notes;
 
-    public float CurrentTime = 0;
-    public int NextExistingNote = 0;
-    public bool[] KeyState;
+    public float CurrentTime { get; private set; }
+    public int NextExistingNote { get; private set; }
+    public bool[] KeyState { get; private set; }
 
     public GameLogic(ref Note[] notes, TimeLogic timeLogic, NoteLogic noteLogic, InputLogic inputLogic)
     {
@@ -72,8 +72,10 @@ public class GameLogic
     {
         if (input is InputEventKey keyEvent)
         {
-            _inputLogic.CurrentTime = _timeLogic.CurrentTime;
-            _inputLogic.NextExistingNote = NextExistingNote;
+            _inputLogic.Update(
+                _timeLogic.CurrentTime,
+                NextExistingNote
+            );
 
             _inputLogic.Process(keyEvent, ref _notes);
             KeyState = _inputLogic.KeyState;
@@ -85,7 +87,7 @@ public class GameLogic
     {
         for (int i = NextExistingNote; i != _notes.GetLength(0); i++)
         {
-            if (_notes[i].isExist == true)
+            if (_notes[i].IsExist == true)
             {
                 NextExistingNote = i;
                 return;

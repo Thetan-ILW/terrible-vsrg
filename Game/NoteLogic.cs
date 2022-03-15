@@ -16,18 +16,18 @@ public class NoteLogic
     {
         for (int i = NextExistingNote; i != notes.GetLength(0) ; i++)
         {
-            if (!notes[i].isExist)
+            if (!notes[i].IsExist)
                 continue;
 
-            if (notes[i].time + _lateMiss < CurrentTime)
+            if (notes[i].Time + _lateMiss < CurrentTime)
             {
                 _scoreSystem.ProcessMiss();
-                notes[i].isExist = false;
+                notes[i].IsExist = false;
                 if (i + 1 != notes.GetLength(0))
                     NextExistingNote = i + 1;
             }
 
-            if (notes[i].isExist == true)
+            if (notes[i].IsExist == true)
                 return;
         }
     }

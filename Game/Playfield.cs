@@ -27,7 +27,7 @@ public class Playfield : Node2D
         );
 
         SkinLoader skinLoader = new SkinLoader();
-        _skin = skinLoader.Build(_chart.inputMode, "Userdata/Skin/", "4k.json");
+        _skin = skinLoader.Build(_chart.InputMode, "Userdata/Skin/", "4k.json");
 
         int[] inputMap = new int[4] {
             (int)KeyList.A,
@@ -51,21 +51,21 @@ public class Playfield : Node2D
         );
         
         _inputLogic = new NearestInputLogic(
-            inputMode: _chart.inputMode, 
+            inputMode: _chart.InputMode, 
             scoreSystem: _scoreSystem, 
             inputMap: inputMap,
             hitWindow: 155f
         );
 
         _gameLogic = new GameLogic(
-            notes: ref _chart.notes,
+            notes: ref _chart.Notes,
             timeLogic: _timeLogic,
             noteLogic: _noteLogic,
             inputLogic: _inputLogic
         );
 
         _conveyor.Construct(
-            notes: ref _chart.notes,
+            notes: ref _chart.Notes,
             skin: _skin,
             timeLogic: _timeLogic,
             gameLogic: _gameLogic,

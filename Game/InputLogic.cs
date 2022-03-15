@@ -1,21 +1,34 @@
 using Godot;
-using System;
 
-public abstract class InputLogic // Реагирует на нажатия игрока
+public abstract class InputLogic
 {
     protected int[] _inputMap;
-    public bool[] KeyState;
+    public bool[] KeyState { get; private set; }
 
-    public float CurrentTime = 0;
-    public int NextExistingNote = 0;
+    public float CurrentTime { get; private set; }
+    public int NextExistingNote { get; private set; }
 
-    protected float _hitWindow = 155f;
+    protected float _hitWindow;
 
     protected ScoreSystem _scoreSystem;
+
+    public void Construct(int inputMode, ScoreSystem scoreSystem, float hitWindow, int[] inputMap)
+    {
+        _scoreSystem = scoreSystem;
+        _hitWindow = hitWindow;
+        _inputMap = inputMap;
+        KeyState = new bool[inputMode];
+    }
 
     public void ChangeKeyState(int key, bool state)
     {
         KeyState[key] = state;
+    }
+
+    public void Update(float time, int nextExistingNote)
+    {
+        CurrentTime = time;
+        NextExistingNote = nextExistingNote;
     }
 
     public void Process(InputEventKey keyEvent, ref Note[] notes)
@@ -38,7 +51,7 @@ public abstract class InputLogic // Реагирует на нажатия иг�
             }
         }
 
-        if (!keyEvent.Pressed) // Тоесть release
+        if (!keyEvent.Pressed) // release
         {
             int column = 0;
             foreach (int key in _inputMap)
@@ -59,13 +72,15 @@ public abstract class InputLogic // Реагирует на нажатия иг�
 
 public class EarlyInputLogic : InputLogic
 {
-    // Считаем самую раннюю ноту попадающую под зону попадания
+    // Count only the earliest existing note
     public EarlyInputLogic(int inputMode, ScoreSystem scoreSystem, int[] inputMap, float hitWindow)
     {
-        _inputMap = inputMap;
-        _scoreSystem = scoreSystem;
-        KeyState = new bool[inputMode];
-        _hitWindow = hitWindow;
+        Construct(
+            inputMode,
+            scoreSystem,
+            hitWindow,
+            inputMap
+        );
     }
 
     public override void ProcessPress(int column, float time, ref Note[] notes)
@@ -78,23 +93,23 @@ public class EarlyInputLogic : InputLogic
         {
             ref Note note = ref notes[i];
 
-            if (!note.isExist)
+            if (!note.IsExist)
                 continue;
             
-            if (note.column != column)
+            if (note.Column != column)
                 continue;
 
-            earlyTime = note.time - _hitWindow;
-            lateTime = note.time + _hitWindow;
+            earlyTime = note.Time - _hitWindow;
+            lateTime = note.Time + _hitWindow;
 
             if (time < earlyTime)
                 return;    
 
             if (time > earlyTime && time < lateTime)
             {
-                deltaTime = note.time - time;
+                deltaTime = note.Time - time;
                 _scoreSystem.ProcessHit(deltaTime);
-                note.isExist = false;
+                note.IsExist = false;
                 return;
             }
         }
@@ -103,14 +118,16 @@ public class EarlyInputLogic : InputLogic
 
 public class NearestInputLogic : InputLogic
 {
-    // Ищем раннюю и позднюю ноту относительно текущего времени
-    // И считаем только ту которая ближе к текущему времени
+    // Looking for an early and late note relative to the current time
+    // And we count the nearest of these two
     public NearestInputLogic(int inputMode, ScoreSystem scoreSystem, int[] inputMap, float hitWindow)
     {
-        this._inputMap = inputMap;
-        this._scoreSystem = scoreSystem;
-        KeyState = new bool[inputMode];
-        _hitWindow = hitWindow;
+        Construct(
+            inputMode,
+            scoreSystem,
+            hitWindow,
+            inputMap
+        );
     }
 
     public override void ProcessPress(int column, float time, ref Note[] notes)
@@ -120,7 +137,7 @@ public class NearestInputLogic : InputLogic
          
         if (earlyNoteIndex != -1 && lateNoteIndex != -1)
         {   // If early and late note exists
-            if (notes[earlyNoteIndex].time - time < time - notes[lateNoteIndex].time)
+            if (notes[earlyNoteIndex].Time - time < time - notes[lateNoteIndex].Time)
                 CountNote(notes, earlyNoteIndex, time);
             else
                 CountNote(notes, lateNoteIndex, time);
@@ -147,13 +164,13 @@ public class NearestInputLogic : InputLogic
         {
             Note note = notes[i];
 
-            if (!note.isExist)
+            if (!note.IsExist)
                 continue;
             
-            if (note.column != column)
+            if (note.Column != column)
                 continue;
 
-            if (note.time < time)
+            if (note.Time < time)
             {
                 index = i;
                 continue;
@@ -170,13 +187,13 @@ public class NearestInputLogic : InputLogic
         {
             Note note = notes[i];
 
-            if (!note.isExist)
+            if (!note.IsExist)
                 continue;
 
-            if (note.column != column)
+            if (note.Column != column)
                 continue;
 
-            if (note.time > time)
+            if (note.Time > time)
                 return i;
         }
         return -1;
@@ -184,15 +201,15 @@ public class NearestInputLogic : InputLogic
 
     public void CountNote(Note[] notes, int noteIndex, float time)
     {
-        float earlyTime = notes[noteIndex].time - _hitWindow;
-        float lateTime = notes[noteIndex].time + _hitWindow;
+        float earlyTime = notes[noteIndex].Time - _hitWindow;
+        float lateTime = notes[noteIndex].Time + _hitWindow;
         float deltaTime = 0;
 
         if (time > earlyTime && time < lateTime)
         {
-            deltaTime = notes[noteIndex].time - time;
+            deltaTime = notes[noteIndex].Time - time;
             _scoreSystem.ProcessHit(deltaTime);
-            notes[noteIndex].isExist = false;
+            notes[noteIndex].IsExist = false;
             return;
         }
     }

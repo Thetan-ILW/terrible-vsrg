@@ -19,7 +19,7 @@ public class ChartGenerator
             i++;
             do {
                 notes[i] = new Note(time * timeMs, rnd.Next(0, 4), false, 1);
-            } while (notes[i].column == notes[i - 1].column);
+            } while (notes[i].Column == notes[i - 1].Column);
             time++;
         }
         return notes;

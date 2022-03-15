@@ -6,9 +6,10 @@ public class TimeLogic : Node
     private Audio _audio;
 
     public float CurrentTime { get; private set; }
-    private const float TimeMultiply = 1000;
-    private const float PauseTimeMultiply = 0;
-    private float _addTime = TimeMultiply;
+
+    private const float _timeMultiply = 1000;
+    private const float _pauseTimeMultiply = 0;
+    private float _addTime = _timeMultiply;
     private float _timeRate = 1;
 
     private bool _isPaused = false;
@@ -36,12 +37,12 @@ public class TimeLogic : Node
     {
         if (!_isPaused && CurrentTime > _lastPauseTime + _pauseCooldown)
         {
-            _addTime = PauseTimeMultiply;
+            _addTime = _pauseTimeMultiply;
             _isPaused = true;
         }
         else if (_isPaused)
         {
-            _addTime = TimeMultiply;
+            _addTime = _timeMultiply;
 
             if (CurrentTime - _afterPauseTimeDecrease < 0f)
                 CurrentTime = 0f;
