@@ -1,39 +1,33 @@
 using Godot;
 
+public enum NoteType
+{
+    ShortNote,
+    LongNote,
+    Mine
+}
+
 public struct Note 
 {
     public int Column { get; private set; }
     public float Time { get; private set; }
     public float Length { get; private set; }
-    public bool IsLongNote { get; private set; }
+    public NoteType Type { get; private set; }
     public bool IsExist { get; set; }
 
-    public Note(float time, int column, bool isLongNote, float length)
+    public Note(float time, int column, NoteType type, float length)
     {
         Column = column;
         Time = time;
         Length = length;
-        IsLongNote = isLongNote;
+        Type = type;
         IsExist = true;
     }
 }
 
-public struct Chart
+public struct TimingPoint
 {
-    public string Artist { get; private set; }
-    public string Title { get; private set; }
-    public string Difficulty { get; private set; }
-    public int InputMode { get; private set; }
-    public Note[] Notes;
 
-    public Chart(string artist, string title, string difficulty, int inputMode, Note[] notes)
-    {
-        this.Artist = artist;
-        this.Title = title;
-        this.Difficulty = difficulty;
-        this.InputMode = inputMode;
-        this.Notes = notes;
-    }
 }
 
 public class GameLogic

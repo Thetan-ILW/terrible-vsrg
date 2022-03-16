@@ -28,6 +28,7 @@ public class TimeLogic
     public void Process(float deltaTime)
     {
         CurrentTime += deltaTime * _addTime;
+        _audio.CurrentTime = CurrentTime;
     }
 
     public void SetPause()
@@ -35,6 +36,7 @@ public class TimeLogic
         if (!_isPaused && CurrentTime > _lastPauseTime + _pauseCooldown)
         {
             _addTime = _pauseTimeMultiply;
+            _audio.StreamPaused = true;
             _isPaused = true;
         }
         else if (_isPaused)
@@ -47,6 +49,8 @@ public class TimeLogic
                 CurrentTime += _afterPauseTimeDecrease; // legal cheats :)
             
             _isPaused = false;
+            _audio.Play(CurrentTime / 1000);
+            _audio.StreamPaused = false;
             _lastPauseTime = CurrentTime;
         }
     }

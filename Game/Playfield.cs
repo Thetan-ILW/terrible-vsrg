@@ -15,17 +15,10 @@ public class Playfield : Node2D
     private NoteLogic _noteLogic;
     private InputLogic _inputLogic;
 
-    public override void _Ready()
+    public Playfield(Chart chart, Audio audio)
     {
-        ChartGenerator cg = new ChartGenerator();
-        _chart = new Chart(
-            "Artist",
-            "Title",
-            "Expert",
-            4,
-            cg.DoMagic()
-        );
-
+        _chart = chart;
+        _audio = audio;
         SkinLoader skinLoader = new SkinLoader();
         _skin = skinLoader.Build(_chart.InputMode, "Userdata/Skin/", "4k.json");
 
@@ -76,6 +69,8 @@ public class Playfield : Node2D
         );
         AddChild(_info);
         _scoreSystem.After(_info); // yes
+
+        AddChild(_audio);
     }
 
     public override void _Process(float delta)
