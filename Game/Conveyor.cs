@@ -16,7 +16,8 @@ public class Conveyor : Node2D
 
     public float ScrollSpeed = 0;
 
-    public void Construct(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed)
+    public Conveyor(){}
+    public Conveyor(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed)
     {
         _notes = notes;
         _skin = skin;

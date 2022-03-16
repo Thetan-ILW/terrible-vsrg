@@ -36,10 +36,7 @@ public class Playfield : Node2D
             (int)KeyList.L,
         };
 
-        _info = GetNode<Info>("Info");
-        _conveyor = GetNode<Conveyor>("Conveyor");
-
-        _scoreSystem = new ScoreSystem(_info);
+        _scoreSystem = new ScoreSystem();
         _noteLogic = new NoteLogic(_scoreSystem);
 
         _timeLogic = new TimeLogic(
@@ -64,15 +61,21 @@ public class Playfield : Node2D
             inputLogic: _inputLogic
         );
 
-        _conveyor.Construct(
+        _conveyor = new Conveyor(
             notes: ref _chart.Notes,
             skin: _skin,
             timeLogic: _timeLogic,
             gameLogic: _gameLogic,
             scrollSpeed: 1.3f
         );
+        AddChild(_conveyor);
 
-        _info.Construct(_skin, _scoreSystem);
+        _info = new Info(
+            _skin,
+            _scoreSystem
+        );
+        AddChild(_info);
+        _scoreSystem.After(_info); // yes
     }
 
     public override void _Process(float delta)

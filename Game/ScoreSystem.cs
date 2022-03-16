@@ -12,7 +12,7 @@ public class ScoreSystem
 
     public Dictionary<string, IScoreSystem> Container;
 
-    public ScoreSystem(Info info)
+    public ScoreSystem()
     {
         Container = new Dictionary<string, IScoreSystem>
         {
@@ -34,7 +34,10 @@ public class ScoreSystem
                 )
             }
         };
+    }
 
+    public void After(Info info) 
+    {
         _info = info;
     }
 

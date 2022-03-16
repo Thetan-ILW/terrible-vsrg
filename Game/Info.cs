@@ -15,7 +15,8 @@ public class Info : Node2D
     private JudgeDrawable _judgeDrawable;
     private ErrorBar _errorBar;
 
-    public void Construct(Skin skin, ScoreSystem scoreSystem)
+    public Info() {}
+    public Info(Skin skin, ScoreSystem scoreSystem)
     {
         _skin = skin;
 
