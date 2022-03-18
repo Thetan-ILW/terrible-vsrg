@@ -18,7 +18,7 @@ public struct Chart
     }
 }
 
-public interface IParser
+public interface IChartParser
 {
     Chart GetChart(string chartPath);
 }

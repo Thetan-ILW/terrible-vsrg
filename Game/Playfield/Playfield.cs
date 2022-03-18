@@ -15,27 +15,22 @@ public class Playfield : Node2D
     private NoteLogic _noteLogic;
     private InputLogic _inputLogic;
 
-    public Playfield(Chart chart, Audio audio)
+    public Playfield() {}
+    public Playfield(Skin skin, Chart chart, Audio audio, Modifiers modifiers, Settings settings)
     {
+        _skin = skin;
         _chart = chart;
         _audio = audio;
-        SkinLoader skinLoader = new SkinLoader();
-        _skin = skinLoader.Build(_chart.InputMode, "Userdata/Skin/", "4k.json");
-
-        int[] inputMap = new int[4] {
-            (int)KeyList.A,
-            (int)KeyList.S,
-            (int)KeyList.K,
-            (int)KeyList.L,
-        };
+        
+        int[] inputMap = settings.InputMap[chart.InputMode];
 
         _scoreSystem = new ScoreSystem();
         _noteLogic = new NoteLogic(_scoreSystem);
 
         _timeLogic = new TimeLogic(
             audio: _audio,
-            time: -2_000f,
-            timeRate: 1f,
+            time: _chart.Notes[0].Time - settings.PrepareTime,
+            timeRate: modifiers.TimeRate,
             afterPauseTimeDecrease: -750,
             pauseCooldown: 5000
         );
@@ -59,7 +54,7 @@ public class Playfield : Node2D
             skin: _skin,
             timeLogic: _timeLogic,
             gameLogic: _gameLogic,
-            scrollSpeed: 1.3f
+            scrollSpeed: settings.ScrollSpeed
         );
         AddChild(_conveyor);
 

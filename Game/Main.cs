@@ -3,40 +3,28 @@ using System;
 
 public class Main : Node2D
 {
-    private OsuParser _osuParser;
-    private Chart _chart;
+    private Settings _settings;
     private Audio _audio;
-
-    private SongSelect _songSelect;
-    private Playfield _playfield;
+    private ScreenSwitcher _screenSwitcher;
 
     public override void _Ready()
     {
-        PackedScene songSelect = GD.Load<PackedScene>("res://Nodes/SongSelect.tscn");
-        _songSelect = songSelect.Instance<SongSelect>();
-        _songSelect.Init(this);
-        AddChild(_songSelect);
+        SettingsLoader settingsLoader = new SettingsLoader();
+        Audio _audio = new Audio();
+        _screenSwitcher = new ScreenSwitcher(this, _audio);
+        _settings = settingsLoader.GetSettings();
+        _audio = new Audio(1f, _settings.MusicVolume);
+
+        SetToMainMenu();
     }
 
-    public void StartChart(string path)
+    public void SetToMainMenu()
     {
-        string directoryName = path.Substring(
-            0, 
-            path.LastIndexOf("/") + 1
-        );
+        _screenSwitcher.SetToMainMenu();
+    }
 
-        string chartName = path.Substring(directoryName.Length);
-
-        _osuParser = new OsuParser();
-        _chart = _osuParser.GetChart(directoryName + chartName);
-
-        _audio = new Audio();
-        _audio.SetAudio(
-            directoryName + _chart.AudioPath
-        );
-
-        _songSelect.Visible = false;
-        _playfield = new Playfield(_chart, _audio);
-        AddChild(_playfield);
+    public void StartChart(string chartPath)
+    {
+        _screenSwitcher.SetToPlayfield(chartPath);
     }
 }

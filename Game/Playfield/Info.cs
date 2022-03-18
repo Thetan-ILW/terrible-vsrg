@@ -28,13 +28,13 @@ public class Info : Node2D
         _accuracyText = new DrawableText(
             "res://Assets/Roboto-Light.ttf",
             48,
-            new Vector2(5, 40)
+            skin.AccuracyPosition
         );
 
         _comboText = new DrawableText(
             "res://Assets/Roboto-Light.ttf",
             48,
-            new Vector2(612, 300)
+            skin.ComboPosition
         );
 
         _judgeDrawable = new JudgeDrawable(

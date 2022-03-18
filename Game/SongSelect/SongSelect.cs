@@ -4,16 +4,16 @@ using System;
 public class SongSelect : Node2D
 {
     private Main _main;
-    private LineEdit _lineEdit;
+    private LineEdit _chartPath;
 
     public void Init(Main main)
     {
         _main = main;
-        _lineEdit = GetNode<LineEdit>("LineEdit");
+        _chartPath = GetNode<LineEdit>("ChartPath");
     }
 
     public void StartChart()
     {
-        _main.StartChart(_lineEdit.Text);
+        _main.StartChart(_chartPath.Text);
     }
 }

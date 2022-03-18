@@ -1,6 +1,6 @@
 {
     "inputMode": 4,
-    "position": [335, 530],
+    "position": [650, 820],
     "noteSize": [146,146],
     "keySize": [146, 146],
 
@@ -25,9 +25,9 @@
         "keyP-3.png"
     ],
 
-    "comboPosition": [600, 310],
+    "comboPosition": [920, 540],
 
-    "accuracyPosition":[5, 5],
+    "accuracyPosition":[5, 48],
     "accuracyFormat": "{0:P2}",
 
     "judgeImage": [
@@ -36,8 +36,8 @@
         "judges/bad.png",
         "judges/miss.png"
     ],
-    "judgePosition": [520, 320],
+    "judgePosition": [845, 320],
     "judgeScale": [0.5, 0.5],
 
-    "errorBarPosition": [630, 420]
+    "errorBarPosition": [945, 420]
 }

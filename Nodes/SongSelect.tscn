@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Assets/Roboto-Light.tres" type="DynamicFont" id=1]
-[ext_resource path="res://Game/SongSelect.cs" type="Script" id=2]
+[ext_resource path="res://Game/SongSelect/SongSelect.cs" type="Script" id=2]
 
 [node name="SongSelect" type="Node2D"]
 script = ExtResource( 2 )
@@ -10,11 +10,11 @@ script = ExtResource( 2 )
 margin_left = 14.0
 margin_top = 70.0
 margin_right = 156.0
-margin_bottom = 121.0
+margin_bottom = 123.0
 custom_fonts/font = ExtResource( 1 )
 text = "Start"
 
-[node name="LineEdit" type="LineEdit" parent="."]
+[node name="ChartPath" type="LineEdit" parent="."]
 margin_left = 14.0
 margin_top = 14.0
 margin_right = 1267.0

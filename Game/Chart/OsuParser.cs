@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-public class OsuParser : IParser
+public class OsuParser : IChartParser
 {
     public Chart GetChart(string chartPath)
     {
@@ -13,7 +13,7 @@ public class OsuParser : IParser
         var difficulty = GetInfoSection(fileLines, "[Difficulty]");
 
         //TimingPoint[] _timing;
-        Note[] _notes = GetNotes(
+        Note[] notes = GetNotes(
             fileLines,
             Convert.ToInt32(difficulty["CircleSize"])
         );
@@ -24,7 +24,7 @@ public class OsuParser : IParser
             metadata["Version"],
             general["AudioFilename"],
             Convert.ToInt32(difficulty["CircleSize"]),
-            _notes
+            notes
         );
     }
 
@@ -102,7 +102,7 @@ public class OsuParser : IParser
         return notes;
     }
 
-    public int GetColumn(float value, int inputMode) // PUBLIC СМЕНИ НА PRIVATE
+    private int GetColumn(float value, int inputMode)
     {
         return (int)Math.Floor((value / 512f) * inputMode);
     }

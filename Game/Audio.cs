@@ -1,8 +1,18 @@
 using Godot;
 
-public class Audio : AudioStreamPlayer2D
+public class Audio : AudioStreamPlayer
 {
     public float CurrentTime = -1f;
+    private float _playbackRate = 1f;
+
+    public double Volume = 0.1;
+
+    public Audio() {}
+    public Audio(float playbackRate, double volume)
+    {
+        _playbackRate = playbackRate;
+        Volume = volume;
+    }
 
     public void SetAudio(string audioPath)
     {
@@ -23,8 +33,17 @@ public class Audio : AudioStreamPlayer2D
                 throw new System.Exception("This audio format is not supported");
         }
         
-        VolumeDb = -20f;
-        
+        VolumeDb = Linear2Db(Volume);
+    }
+
+    public void SetPlaybackSpeed(float rate)
+    {
+        PitchScale = rate;
+    }
+
+    private float Linear2Db(double linear)
+    {   //https://github.com/godotengine/godot/blob/master/core/math/math_funcs.h wtf
+        return (float)(System.Math.Log(linear) * 8.6858896380650365530225783783321);
     }
 
     private AudioStreamMP3 LoadAudioMP3(File file)
@@ -45,8 +64,7 @@ public class Audio : AudioStreamPlayer2D
     {
         if (CurrentTime >= 0)
         {
-            Position = new Vector2(640, 360);
-            Play();
+            Play(CurrentTime / 1000);
             SetProcess(false);
         }
     }
