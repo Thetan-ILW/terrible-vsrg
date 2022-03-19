@@ -2,6 +2,7 @@ using Godot;
 
 public class Playfield : Node2D
 {
+    private Main _main;
     private Chart _chart;
     private Skin _skin;
 
@@ -16,8 +17,9 @@ public class Playfield : Node2D
     private InputLogic _inputLogic;
 
     public Playfield() {}
-    public Playfield(Skin skin, Chart chart, Audio audio, Modifiers modifiers, Settings settings)
+    public Playfield(Main main, Skin skin, Chart chart, Audio audio, Modifiers modifiers, Settings settings)
     {
+        _main = main;
         _skin = skin;
         _chart = chart;
         _audio = audio;
@@ -44,12 +46,13 @@ public class Playfield : Node2D
 
         _gameLogic = new GameLogic(
             notes: ref _chart.Notes,
+            playfield: this,
             timeLogic: _timeLogic,
             noteLogic: _noteLogic,
             inputLogic: _inputLogic
         );
 
-        _conveyor = new Conveyor(
+        _conveyor = new FixedFpsConveyor(
             notes: ref _chart.Notes,
             skin: _skin,
             timeLogic: _timeLogic,
@@ -74,16 +77,30 @@ public class Playfield : Node2D
         _gameLogic.Process();
     }
 
+    public override void _PhysicsProcess(float delta)
+    {
+        _gameLogic.FixedProcess();
+    }
+
     public override void _Input(InputEvent input)
     {
         _gameLogic.Input(input);
 
-        if (Input.IsActionJustPressed("restart_chart"))
-            GetTree().ReloadCurrentScene();
-
-        if (Input.IsActionJustPressed("pause"))
+        if (input is InputEventKey keyEvent)
         {
-            _timeLogic.SetPause();
+            if (Input.IsActionJustPressed("restart_chart"))
+                GetTree().ReloadCurrentScene();
+
+            if (Input.IsActionJustPressed("pause"))
+                _timeLogic.SetPause();
+
+            if(Input.IsActionJustPressed("return_to_song_select"))
+                _main.SetToSongSelect();
         }
+    }
+
+    public void ChartEnded()
+    {
+        _main.SetToResultScreen(_scoreSystem);
     }
 }

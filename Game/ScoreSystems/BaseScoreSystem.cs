@@ -2,6 +2,7 @@ public class BaseScoreSystem : IScoreSystem
 {
     public int Hits { get; private set; }
     public int Combo { get; private set; }
+    public int MaxCombo { get; private set; }
     public int Miss { get; private set; }
     public float LastDelta { get; private set; }
 
@@ -9,6 +10,7 @@ public class BaseScoreSystem : IScoreSystem
     {
         Hits++;
         Combo++;
+        MaxCombo = System.Math.Max(MaxCombo, Combo);
         LastDelta = deltaTime;
     }
 

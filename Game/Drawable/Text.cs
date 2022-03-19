@@ -15,6 +15,12 @@ public class DrawableText : IDrawable
         _position = position;
     }
 
+    public DrawableText(DynamicFont font, Vector2 position)
+    {
+        _font = font;
+        _position = position;
+    }
+
     public void Draw(Node2D node)
     {
         node.DrawString(_font, _position, Text);

@@ -32,25 +32,29 @@ public struct TimingPoint
 
 public class GameLogic
 {
+    private Playfield _playfield;
+
     private TimeLogic _timeLogic;
     private NoteLogic _noteLogic;
     private InputLogic _inputLogic;
 
     private Note[] _notes;
 
-    public float CurrentTime { get; private set; }
     public int NextExistingNote { get; private set; }
     public bool[] KeyState { get; private set; }
 
-    public GameLogic(ref Note[] notes, TimeLogic timeLogic, NoteLogic noteLogic, InputLogic inputLogic)
+    private float chartEndTime = 0f;
+
+    public GameLogic(ref Note[] notes, Playfield playfield, TimeLogic timeLogic, NoteLogic noteLogic, InputLogic inputLogic)
     {
         _notes = notes;
+        _playfield = playfield;
         _timeLogic = timeLogic;
         _noteLogic = noteLogic;
         _inputLogic = inputLogic;
 
-        CurrentTime = _timeLogic.CurrentTime;
         KeyState = _inputLogic.KeyState;
+        chartEndTime = _notes[_notes.GetLength(0) - 1].Time + 500f;
     }
 
     public void Process()
@@ -60,6 +64,12 @@ public class GameLogic
 
         _noteLogic.Process(ref _notes);
         GetNextExistingNote();
+    }
+
+    public void FixedProcess()
+    {
+        if (_timeLogic.CurrentTime > chartEndTime)
+            _playfield.ChartEnded();
     }
 
     public void Input(InputEvent input)

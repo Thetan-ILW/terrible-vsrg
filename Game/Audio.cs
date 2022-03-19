@@ -32,8 +32,8 @@ public class Audio : AudioStreamPlayer
             default:
                 throw new System.Exception("This audio format is not supported");
         }
-        
         VolumeDb = Linear2Db(Volume);
+        CurrentTime = -1f;
     }
 
     public void SetPlaybackSpeed(float rate)
@@ -58,14 +58,5 @@ public class Audio : AudioStreamPlayer
         var audioStream = new AudioStreamOGGVorbis();
         audioStream.Data = file.GetBuffer((long)file.GetLen());
         return audioStream;
-    }
-
-    public override void _Process(float deltaTime)
-    {
-        if (CurrentTime >= 0)
-        {
-            Play(CurrentTime / 1000);
-            SetProcess(false);
-        }
     }
 }

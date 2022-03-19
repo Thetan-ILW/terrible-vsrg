@@ -17,6 +17,7 @@ public class JudgeDrawable : IDrawable
         _badTexture = badTexture;
         _missTexture = missTexture;
         _rect = rect;
+        _currentTexture = new ImageTexture();
     }
 
     public void Update(JudgeScoreSystem.JudgeName judgeName)

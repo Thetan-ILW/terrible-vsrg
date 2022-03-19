@@ -14,6 +14,8 @@ public class TimeLogic
     private float _afterPauseTimeDecrease = 0;
     private float _pauseCooldown = 0;
 
+    private System.Threading.Thread _audioStartTimer;
+
     public TimeLogic(Audio audio, float time, float timeRate, float afterPauseTimeDecrease, float pauseCooldown)
     {
         CurrentTime = time;
@@ -23,12 +25,26 @@ public class TimeLogic
         _lastPauseTime = time - pauseCooldown;
         _afterPauseTimeDecrease = afterPauseTimeDecrease;
         _pauseCooldown = pauseCooldown;
+        _audioStartTimer = new System.Threading.Thread(AudioStartTimer);
+        _audioStartTimer.Start();
     }
 
     public void Process(float deltaTime)
     {
         CurrentTime += deltaTime * _addTime;
         _audio.CurrentTime = CurrentTime;
+    }
+
+    public void AudioStartTimer()
+    {
+        for (;;)
+        {
+            if(CurrentTime > 0)
+            {
+                _audio.Play(CurrentTime / 1000);
+                return;
+            }
+        }
     }
 
     public void SetPause()

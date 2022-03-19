@@ -3,28 +3,59 @@ using System;
 
 public class Main : Node2D
 {
+    enum Screen
+    {
+        SongSelect,
+        Playfield,
+        Result
+    }
+
     private Settings _settings;
-    private Audio _audio;
-    private ScreenSwitcher _screenSwitcher;
+
+    private ScreenBuilder _screenBuilder;
+    private SongSelect _songSelect;
+    private Playfield _playfield;
+    private ResultScreen _resultScreen;
+
+    Screen _currentScreen;
 
     public override void _Ready()
     {
         SettingsLoader settingsLoader = new SettingsLoader();
-        Audio _audio = new Audio();
-        _screenSwitcher = new ScreenSwitcher(this, _audio);
+        _screenBuilder = new ScreenBuilder();
         _settings = settingsLoader.GetSettings();
-        _audio = new Audio(1f, _settings.MusicVolume);
-
-        SetToMainMenu();
+        SetToSongSelect();
     }
 
-    public void SetToMainMenu()
+    public void SetToSongSelect()
     {
-        _screenSwitcher.SetToMainMenu();
+        if (_currentScreen == Screen.Playfield)
+        {
+            RemoveChild(_playfield);
+            _playfield = null;
+        }
+
+        if (_currentScreen == Screen.Result)
+            RemoveChild(_resultScreen);
+
+        _songSelect = _screenBuilder.GetSongSelect(this);
+        AddChild(_songSelect);
+        _currentScreen = Screen.SongSelect;
     }
 
     public void StartChart(string chartPath)
     {
-        _screenSwitcher.SetToPlayfield(chartPath);
+        RemoveChild(_songSelect);
+        _playfield = _screenBuilder.GetPlayfield(this, chartPath);
+        AddChild(_playfield);
+        _currentScreen = Screen.Playfield;
+    }
+
+    public void SetToResultScreen(ScoreSystem scoreSystem)
+    {
+        RemoveChild(_playfield);
+        _resultScreen = _screenBuilder.GetResultScreen(this, scoreSystem);
+        AddChild(_resultScreen);
+        _currentScreen = Screen.Result;
     }
 }
