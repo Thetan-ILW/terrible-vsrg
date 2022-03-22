@@ -1,5 +1,11 @@
 using Godot;
 
+public enum InputLogicType
+{
+    Earliest,
+    Nearest
+}
+
 public abstract class InputLogic
 {
     protected int[] _inputMap;

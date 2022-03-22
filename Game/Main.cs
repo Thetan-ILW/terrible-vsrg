@@ -16,8 +16,7 @@ public class Main : Node2D
     private SongSelect _songSelect;
     private Playfield _playfield;
     private ResultScreen _resultScreen;
-
-    Screen _currentScreen;
+    private Screen _currentScreen;
 
     public override void _Ready()
     {

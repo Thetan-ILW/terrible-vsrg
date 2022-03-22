@@ -5,15 +5,26 @@ using Newtonsoft.Json;
 
 public class Skin
 {
+    public struct Element
+    {
+        public Texture Texture;
+        public Vector2 Position;
+        public Vector2 Size;
+    }
+
+    private SkinLoader.SkinSettings _settings;
+    private Vector2 _defaultResolution;
+    public Vector2 Ratio;
+
     public int InputMode;
 
-    public Vector2 Position;
-    public Vector2 NoteSize;
-    public Vector2 KeySize;
+    public float HitPosition;
+    public float ColumnStart;
+    public Vector2[] ColumnSize;
 
-    public Texture[] NoteImage;
-    public Texture[] KeyImage;
-    public Texture[] KeyPressedImage;
+    public Element[] Notes;
+    public Element[] Keys;
+    public Element[] PressedKeys;
 
     public Vector2 ComboPosition;
 
@@ -26,44 +37,90 @@ public class Skin
 
     public Skin(SkinLoader.SkinSettings settings, SkinLoader skinLoader, string skinFolder)
     {
-        InputMode = settings.InputMode;
+        _settings = settings;
 
-        Position = skinLoader.ArrToVec(settings.Position);
-        NoteSize = skinLoader.ArrToVec(settings.NoteSize);
-        KeySize = skinLoader.ArrToVec(settings.KeySize);
+        _defaultResolution = new Vector2(1280, 720);
+        InputMode = _settings.InputMode;
 
-        NoteImage = new Texture[settings.InputMode];
-        KeyImage = new Texture[settings.InputMode];
-        KeyPressedImage = new Texture[settings.InputMode];
+        HitPosition = _settings.HitPosition * OS.WindowSize.y;
+        ColumnStart = _settings.ColumnStart;
+        ColumnSize = new Vector2[InputMode];
+
+        for (int i = 0; i != _settings.ColumnSizeX.GetLength(0); i++)
+        {
+            ColumnSize[i] = new Vector2(
+                _settings.ColumnSizeX[i],
+                _settings.ColumnSizeY[i]
+            );
+        }
+
+        Notes = new Element[InputMode];
+        Keys = new Element[InputMode];
+        PressedKeys = new Element[InputMode];
+        
+        for (int i = 0; i != InputMode; i++)
+        {
+            Notes[i].Texture = skinLoader.LoadImage(skinFolder, _settings.NoteImage, i);
+            Keys[i].Texture = skinLoader.LoadImage(skinFolder, _settings.KeyImage, i);
+            PressedKeys[i].Texture = skinLoader.LoadImage(skinFolder, _settings.KeyPressedImage, i);
+        }
+
+        Update();
+    }
+
+    public void Update()
+    {
+        HitPosition = _settings.HitPosition * OS.WindowSize.y;
+        Ratio = new Vector2(
+            _defaultResolution.x / OS.WindowSize.x,
+            _defaultResolution.y / OS.WindowSize.y
+        );
 
         for (int i = 0; i != InputMode; i++)
         {
-            skinLoader.LoadImage(skinFolder, settings.NoteImage, NoteImage, i);
-            skinLoader.LoadImage(skinFolder, settings.KeyImage, KeyImage, i);
-            skinLoader.LoadImage(skinFolder, settings.KeyPressedImage, KeyPressedImage, i);
+            float position = 0f;
+            
+            for(int e = 0; e != i;)
+            {
+                position += (Notes[e].Texture.GetSize().y / Ratio.y) * ColumnSize[e].x;
+                e++;
+            }
+
+            position = position / OS.WindowSize.x;
+            
+            // Notes
+            Notes[i].Position = new Vector2(
+                    (_settings.ColumnStart + position) * OS.WindowSize.x,
+                    0
+            );
+
+            Notes[i].Size = new Vector2(
+                (Notes[i].Texture.GetSize().y / Ratio.y) * ColumnSize[i].x,
+                (Notes[i].Texture.GetSize().y / Ratio.y) * ColumnSize[i].y
+            );
+
+            // Keys
+            Keys[i].Position = new Vector2(
+                (_settings.ColumnStart + position) * OS.WindowSize.x,
+                HitPosition
+            );
+
+            Keys[i].Size = new Vector2(
+                (Keys[i].Texture.GetSize().y / Ratio.y) * ColumnSize[i].x,
+                (Keys[i].Texture.GetSize().y / Ratio.y) * ColumnSize[i].y
+            );
+
+            // Pressed Keys
+            PressedKeys[i].Position = new Vector2(
+                (_settings.ColumnStart + position) * OS.WindowSize.x,
+                HitPosition
+            );
+
+            PressedKeys[i].Size = new Vector2(
+                (Keys[i].Texture.GetSize().y / Ratio.y) * ColumnSize[i].x,
+                (Keys[i].Texture.GetSize().y / Ratio.y) * ColumnSize[i].y
+            );
         }
-
-        ComboPosition = skinLoader.ArrToVec(settings.ComboPosition);
-        
-        AccuracyPosition = skinLoader.ArrToVec(settings.AccuracyPosition);
-        AccuracyFormat = settings.AccuracyFormat;
-
-        JudgeImage = new Texture[settings.JudgeImage.GetLength(0)];
-
-        for (int i = 0; i != settings.JudgeImage.GetLength(0); i++)
-        {
-            skinLoader.LoadImage(skinFolder, settings.JudgeImage, JudgeImage, i);
-        }
-
-        Vector2 judgePosition = skinLoader.ArrToVec(settings.JudgePosition);
-        Vector2 judgeScale = skinLoader.ArrToVec(settings.JudgeScale);
-        JudgeRect = new Rect2(
-            judgePosition,
-            JudgeImage[0].GetSize().x * judgeScale.x,
-            JudgeImage[0].GetSize().y * judgeScale.y
-        );
-
-        ErrorBarPosition = skinLoader.ArrToVec(settings.ErrorBarPosition);
     }
 }
 
@@ -73,9 +130,10 @@ public class SkinLoader
     {
         public int InputMode;
 
-        public float[] Position;
-        public float[] NoteSize;
-        public float[] KeySize;
+        public float HitPosition;
+        public float ColumnStart;
+        public float[] ColumnSizeX;
+        public float[] ColumnSizeY;
 
         public string[] NoteImage;
         public string[] KeyImage;
@@ -116,10 +174,10 @@ public class SkinLoader
         return new Vector2(array[0], array[1]);
     }
 
-    public void LoadImage(string skinFolder, string[] namesArray, Texture[] imageArray, int index) 
+    public ImageTexture LoadImage(string skinFolder, string[] namesArray, int index) 
     {   
         ImageTexture image = new ImageTexture();
         image.Load(skinFolder + namesArray[index]);
-        imageArray[index] = image;
+        return image;
     }
 }

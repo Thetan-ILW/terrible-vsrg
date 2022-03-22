@@ -94,8 +94,12 @@ public class Playfield : Node2D
             if (Input.IsActionJustPressed("pause"))
                 _timeLogic.SetPause();
 
-            if(Input.IsActionJustPressed("return_to_song_select"))
+            if (Input.IsActionJustPressed("return_to_song_select"))
                 _main.SetToSongSelect();
+            if (Input.IsActionJustPressed("change_resolution"))
+            {
+                _skin.Update();
+            }
         }
     }
 

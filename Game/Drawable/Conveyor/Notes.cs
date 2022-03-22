@@ -26,21 +26,26 @@ public class DrawableNotes : IDrawable
         {
             Note note = _notes[i];
             // Считаем для каждой ноты из массива нот положение на экране
-            float noteYPosition = (-note.Time + _currentTime + (_skin.Position.y / _scrollSpeed)) * _scrollSpeed;
+            float noteYPosition = (-note.Time + _currentTime + (_skin.HitPosition / (_scrollSpeed / _skin.Ratio.y))) * (_scrollSpeed / _skin.Ratio.y);
+            //float noteYPosition = (-note.Time + _currentTime) * (_scrollSpeed / _skin.Ratio);
 
             // Прерываем рисовку нот если хоть одна нота уже за экраном
             // Потому что после неё уже все ноты будут за границей видимости
-            if (noteYPosition < -_skin.NoteSize.y)
+            if (noteYPosition < -_skin.Notes[0].Size.y)
                 break; 
 
             if (note.IsExist != true)
                 continue;
                      
-            node.DrawTexture(
-                _skin.NoteImage[note.Column],
-                new Godot.Vector2(
-                    _skin.Position.x + (note.Column * _skin.NoteSize.x),
-                    noteYPosition)
+            node.DrawTextureRect(
+                _skin.Notes[note.Column].Texture,
+                new Godot.Rect2(
+                    _skin.Notes[note.Column].Position.x,
+                    noteYPosition,
+                    _skin.Notes[note.Column].Size.x,
+                    _skin.Notes[note.Column].Size.y
+                ),
+                false
             );
         }
     }

@@ -20,22 +20,28 @@ public class DrawableKeys : IDrawable
             switch(_keyState[i])
             {
                 case false:
-                    node.DrawTexture(
-                        _skin.KeyImage[i],
-                        new Godot.Vector2(
-                            _skin.Position.x + (i * _skin.NoteSize.x),
-                            _skin.Position.y
-                        )
+                    node.DrawTextureRect(
+                        _skin.Keys[i].Texture,
+                        new Godot.Rect2(
+                            _skin.Keys[i].Position.x,
+                            _skin.Keys[i].Position.y,
+                            _skin.Keys[i].Size.x,
+                            _skin.Keys[i].Size.y
+                        ),
+                        false
                     );
                     break;
 
                 case true:
-                    node.DrawTexture(
-                        _skin.KeyPressedImage[i],
-                        new Godot.Vector2(
-                            _skin.Position.x + (i * _skin.NoteSize.x),
-                            _skin.Position.y
-                        )
+                    node.DrawTextureRect(
+                        _skin.PressedKeys[i].Texture,
+                        new Godot.Rect2(
+                            _skin.PressedKeys[i].Position.x,
+                            _skin.PressedKeys[i].Position.y,
+                            _skin.PressedKeys[i].Size.x,
+                            _skin.PressedKeys[i].Size.y
+                        ),
+                        false
                     );
                     break;
             }

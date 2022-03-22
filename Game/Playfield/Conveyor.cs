@@ -1,5 +1,11 @@
 using Godot;
 
+public enum ConveyorDrawType
+{
+    RealTime,
+    FixedFps
+}
+
 public abstract class Conveyor : Node2D
 {
     private Skin _skin;
@@ -54,7 +60,7 @@ public abstract class Conveyor : Node2D
 }
 
 public class RealTimeConveyor : Conveyor
-{
+{   // Draw notes every frame
     public RealTimeConveyor(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed)
     {
         Constuct(ref notes, skin, timeLogic, gameLogic, scrollSpeed);
@@ -81,7 +87,7 @@ public class RealTimeConveyor : Conveyor
 }
 
 public class FixedFpsConveyor : Conveyor
-{  
+{   // Draw notes (physics_fps) times per second
     public FixedFpsConveyor(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed)
     {
         Constuct(ref notes, skin, timeLogic, gameLogic, scrollSpeed);

@@ -4,13 +4,23 @@ using Godot;
 
 public struct Settings
 {
+    // Audio
     public double MusicVolume;
-
+    public float AudioOffset;
+    // Gameplay
     public float ScrollSpeed;
     public float PrepareTime;
-    public float InputLogic;
-    public float AudioOffset;
     public float InputOffset;
+    public InputLogicType InputLogic;
+    // Video
+    public bool Vsync;
+    public float FpsLimit;
+    public float VisualOffset;
+    public ConveyorDrawType Conveyor;
+    public float UpdateFps;
+
+    // Misc
+    public string SkinDirectory;
     public Dictionary<int, int[]> InputMap;
 }
 
@@ -24,7 +34,7 @@ public class SettingsLoader
         
         Settings settings = new Settings();
         settings.MusicVolume = 0.1;
-        settings.ScrollSpeed = 1.95f;
+        settings.ScrollSpeed = 1.3f;
         settings.PrepareTime = 2_000f;
         settings.InputMap = inputMap;
 

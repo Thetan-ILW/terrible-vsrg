@@ -25,7 +25,7 @@ public class Info : Node2D
         _wife = (WifeScoreSystem)_scoreSystem.Container["Wife"];
         _judge = (JudgeScoreSystem)_scoreSystem.Container["Judge"];
 
-        _accuracyText = new DrawableText(
+        /*_accuracyText = new DrawableText(
             "res://Assets/Roboto-Light.ttf",
             48,
             skin.AccuracyPosition
@@ -50,12 +50,12 @@ public class Info : Node2D
             10
         );
 
-        UpdateValues();
+        UpdateValues();*/
     }
 
     public void UpdateValues()
     {
-        _accuracyText.Text = string.Format(
+        /*_accuracyText.Text = string.Format(
             _skin.AccuracyFormat,
             _wife.Accuracy
         );
@@ -64,14 +64,14 @@ public class Info : Node2D
         _judgeDrawable.Update(_judge.LastJudge);
         _errorBar.Update(_base.LastDelta, _judge.LastJudge);
 
-        Update();
+        Update();*/
     }
 
     public override void _Draw()
     {
-        _accuracyText.Draw(this);
+        /*_accuracyText.Draw(this);
         _comboText.Draw(this);
         _judgeDrawable.Draw(this);
-        _errorBar.Draw(this);
+        _errorBar.Draw(this);*/
     }
 }

@@ -1,8 +1,10 @@
 {
     "inputMode": 4,
-    "position": [650, 820],
-    "noteSize": [146,146],
-    "keySize": [146, 146],
+
+    "hitPosition": 0.78,
+    "columnStart": 0.5,
+    "columnSizeX": [1, 1, 1, 1],
+    "columnSizeY": [1, 1, 1, 1],
 
     "noteImage": [
         "note-0.png",
