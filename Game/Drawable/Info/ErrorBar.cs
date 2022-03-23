@@ -19,16 +19,22 @@ public class ErrorBar : IDrawable
     private Color _badColor = new Color(1f, 0.173f, 0.886f);
     private Color _missColor = new Color(1f, 0.94f, 0.94f);
 
-    private Vector2 _positon;
+    private Vector2 _position;
+    private Align _horizontalAlign;
+    private Align _verticalAlign;
+
     private ErrorPoint[] _errorPoints;
     private int _limit;
     private int currentIndex = 0;
 
-    public ErrorBar(Vector2 posttion, int limit)
+    public Vector2 ExactPosition;
+
+    public ErrorBar(int limit, Align horizontal, Align vertical)
     {
-        _positon = posttion;
         _errorPoints = new ErrorPoint[limit];
         _limit = limit;
+        _horizontalAlign = horizontal;
+        _verticalAlign = vertical;
     }
 
     public void Update(float deltaTime, JudgeScoreSystem.JudgeName judgeName)
@@ -54,6 +60,11 @@ public class ErrorBar : IDrawable
         }
     }
 
+    public void UpdatePosition()
+    {
+        _position = ExactPosition;
+    }
+
     public void AddPoint(float deltaTime, Color color)
     {
         _errorPoints[currentIndex] = new ErrorPoint(
@@ -66,12 +77,12 @@ public class ErrorBar : IDrawable
     {
         node.DrawLine(
             new Vector2(
-                _positon.x, 
-                _positon.y - 20
+                _position.x, 
+                _position.y - 20
             ),
             new Vector2(
-                _positon.x,
-                _positon.y + 40
+                _position.x,
+                _position.y + 40
             ),
             new Color(1, 1, 1, 1),
             3
@@ -81,12 +92,12 @@ public class ErrorBar : IDrawable
         {
             node.DrawLine(
                 new Vector2(
-                    _positon.x + point.Delta, 
-                    _positon.y
+                    _position.x + point.Delta, 
+                    _position.y
                 ),
                 new Vector2(
-                    _positon.x + point.Delta,
-                    _positon.y + 20
+                    _position.x + point.Delta,
+                    _position.y + 20
                 ),
                 point.Color,
                 3

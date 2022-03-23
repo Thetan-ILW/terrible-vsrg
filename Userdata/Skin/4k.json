@@ -2,9 +2,9 @@
     "inputMode": 4,
 
     "hitPosition": 0.78,
-    "columnStart": 0.5,
-    "columnSizeX": [1, 1, 1, 1],
-    "columnSizeY": [1, 1, 1, 1],
+    "columnStart": 0.33,
+    "columnSizeX": [0.8, 0.8, 0.8, 0.8],
+    "columnSizeY": [0.8, 0.8, 0.8, 0.8],
 
     "noteImage": [
         "note-0.png",
@@ -27,19 +27,37 @@
         "keyP-3.png"
     ],
 
-    "comboPosition": [920, 540],
+    "accuracyText": {
+        "position": [1, 0],
+        "fontName": "Roboto-Light.ttf",
+        "fontSize": 48,
+        "align": ["Right", "Top"],
+        "format": "{0:P2}"
+    },
 
-    "accuracyPosition":[5, 48],
-    "accuracyFormat": "{0:P2}",
+    "comboText": {
+        "position": [0.5, 0.5],
+        "fontName": "Roboto-Light.ttf",
+        "fontSize": 72,
+        "align": ["Middle", "Middle"],
+        "format": "{0}"
+    },
 
-    "judgeImage": [
-        "judges/max.png",
-        "judges/good.png",
-        "judges/bad.png",
-        "judges/miss.png"
-    ],
-    "judgePosition": [845, 320],
-    "judgeScale": [0.5, 0.5],
+    "judgeImage": {
+        "position": [0.5, 0.5],
+        "scale": 0.5,
+        "align": ["Middle", "Middle"],
+        "images": [
+            "judges/max.png",
+            "judges/good.png",
+            "judges/bad.png",
+            "judges/miss.png"
+        ]
+    },
 
-    "errorBarPosition": [945, 420]
+    "errorBar": {
+        "position": [0.5, 0.42],
+        "limit": 10
+    }
 }
+

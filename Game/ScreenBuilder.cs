@@ -25,7 +25,7 @@ public class ScreenBuilder
         Chart chart = _osuParser.GetChart(directoryName + chartName);
 
         SkinLoader skinLoader = new SkinLoader();
-        Skin skin = skinLoader.Build(chart.InputMode, "Userdata/Skin/", "4k.json");
+        Skin skin = skinLoader.Build(chart.InputMode, "Userdata/Skin/");
 
         Modifiers modifiers = new Modifiers(true, 1f);
 

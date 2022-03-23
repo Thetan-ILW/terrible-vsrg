@@ -1,16 +1,18 @@
 {
     "inputMode": 7,
-    "position": [140, 530],
-    "noteSize": [146, 146],
-    "keySize": [146, 146],
+
+    "hitPosition": 0.78,
+    "columnStart": 0.1,
+    "columnSizeX": [1, 1, 1, 1, 1, 1, 1],
+    "columnSizeY": [1, 1, 1, 1, 1, 1, 1],
 
     "noteImage": [
         "note-0.png",
         "note-1.png",
         "note-2.png",
         "note-3.png",
-        "note-2.png",
         "note-1.png",
+        "note-2.png",
         "note-3.png"
     ],
 
@@ -19,8 +21,8 @@
         "key-1.png",
         "key-2.png",
         "key-3.png",
-        "key-2.png",
         "key-1.png",
+        "key-2.png",
         "key-3.png"
     ],
 
@@ -29,14 +31,14 @@
         "keyP-1.png",
         "keyP-2.png",
         "keyP-3.png",
-        "keyP-2.png",
         "keyP-1.png",
+        "keyP-2.png",
         "keyP-3.png"
     ],
 
-    "comboPosition": [600, 310],
+    "comboPosition": [920, 540],
 
-    "accuracyPosition":[5, 5],
+    "accuracyPosition":[5, 48],
     "accuracyFormat": "{0:P2}",
 
     "judgeImage": [
@@ -45,8 +47,8 @@
         "judges/bad.png",
         "judges/miss.png"
     ],
-    "judgePosition": [520, 320],
+    "judgePosition": [845, 320],
     "judgeScale": [0.5, 0.5],
 
-    "errorBarPosition": [630, 420]
+    "errorBarPosition": [945, 420]
 }

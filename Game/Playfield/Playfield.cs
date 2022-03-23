@@ -52,7 +52,7 @@ public class Playfield : Node2D
             inputLogic: _inputLogic
         );
 
-        _conveyor = new FixedFpsConveyor(
+        _conveyor = new RealTimeConveyor(
             notes: ref _chart.Notes,
             skin: _skin,
             timeLogic: _timeLogic,
@@ -96,11 +96,12 @@ public class Playfield : Node2D
 
             if (Input.IsActionJustPressed("return_to_song_select"))
                 _main.SetToSongSelect();
-            if (Input.IsActionJustPressed("change_resolution"))
-            {
-                _skin.Update();
-            }
         }
+    }
+
+    public void SizeChanged()
+    {
+        _skin.Update();
     }
 
     public void ChartEnded()

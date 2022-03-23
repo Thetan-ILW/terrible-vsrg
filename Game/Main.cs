@@ -40,6 +40,7 @@ public class Main : Node2D
         _songSelect = _screenBuilder.GetSongSelect(this);
         AddChild(_songSelect);
         _currentScreen = Screen.SongSelect;
+        Input.SetMouseMode(Input.MouseMode.Visible);
     }
 
     public void StartChart(string chartPath)
@@ -47,7 +48,9 @@ public class Main : Node2D
         RemoveChild(_songSelect);
         _playfield = _screenBuilder.GetPlayfield(this, chartPath);
         AddChild(_playfield);
+        GetTree().Root.Connect("size_changed", _playfield, nameof(_playfield.SizeChanged));
         _currentScreen = Screen.Playfield;
+        Input.SetMouseMode(Input.MouseMode.Hidden);
     }
 
     public void SetToResultScreen(ScoreSystem scoreSystem)
@@ -56,5 +59,6 @@ public class Main : Node2D
         _resultScreen = _screenBuilder.GetResultScreen(this, scoreSystem);
         AddChild(_resultScreen);
         _currentScreen = Screen.Result;
+        Input.SetMouseMode(Input.MouseMode.Visible);
     }
 }

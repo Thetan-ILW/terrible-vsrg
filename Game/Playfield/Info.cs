@@ -12,7 +12,7 @@ public class Info : Node2D
     private DrawableText _accuracyText;
     private DrawableText _comboText;
 
-    private JudgeDrawable _judgeDrawable;
+    private JudgeDrawable _judgeImage;
     private ErrorBar _errorBar;
 
     public Info() {}
@@ -25,53 +25,29 @@ public class Info : Node2D
         _wife = (WifeScoreSystem)_scoreSystem.Container["Wife"];
         _judge = (JudgeScoreSystem)_scoreSystem.Container["Judge"];
 
-        /*_accuracyText = new DrawableText(
-            "res://Assets/Roboto-Light.ttf",
-            48,
-            skin.AccuracyPosition
-        );
+        _accuracyText = skin.AccuracyText;
+        _comboText = skin.ComboText;
+        _judgeImage = skin.JudgeImage;
+        _errorBar = skin.ErrorBar;
 
-        _comboText = new DrawableText(
-            "res://Assets/Roboto-Light.ttf",
-            48,
-            skin.ComboPosition
-        );
-
-        _judgeDrawable = new JudgeDrawable(
-            skin.JudgeImage[0],
-            skin.JudgeImage[1],
-            skin.JudgeImage[2],
-            skin.JudgeImage[3],
-            skin.JudgeRect
-        );
-
-        _errorBar = new ErrorBar(
-            skin.ErrorBarPosition,
-            10
-        );
-
-        UpdateValues();*/
+        UpdateValues();
     }
 
     public void UpdateValues()
     {
-        /*_accuracyText.Text = string.Format(
-            _skin.AccuracyFormat,
-            _wife.Accuracy
-        );
-
-        _comboText.Text = _base.Combo.ToString();
-        _judgeDrawable.Update(_judge.LastJudge);
+        _accuracyText.SetText(_wife.Accuracy);
+        _comboText.SetText(_base.Combo);
+        _judgeImage.Update(_judge.LastJudge);
         _errorBar.Update(_base.LastDelta, _judge.LastJudge);
 
-        Update();*/
+        Update();
     }
 
     public override void _Draw()
     {
-        /*_accuracyText.Draw(this);
+        _accuracyText.Draw(this);
         _comboText.Draw(this);
-        _judgeDrawable.Draw(this);
-        _errorBar.Draw(this);*/
+        _judgeImage.Draw(this);
+        _errorBar.Draw(this);
     }
 }

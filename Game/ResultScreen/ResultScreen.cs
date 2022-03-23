@@ -24,10 +24,10 @@ public class ResultScreen : Node2D
 
         info = new Dictionary<string, DrawableText>();
         
-        info.Add("MaxCombo", new DrawableText(font, new Vector2(0,40)));
-        info.Add("Accuracy", new DrawableText(font, new Vector2(0,80)));
-        info["MaxCombo"].Text = "Max combo: " + Convert.ToString(baseScoreSystem.MaxCombo);
-        info["Accuracy"].Text = "Accuracy: " + string.Format("{0:P2}", wife.Accuracy);
+        info.Add("MaxCombo", new DrawableText(font, new Vector2(0,0)));
+        info.Add("Accuracy", new DrawableText(font, new Vector2(0,40)));
+        info["MaxCombo"].SetText("Max combo: " + Convert.ToString(baseScoreSystem.MaxCombo));
+        info["Accuracy"].SetText("Accuracy: " + string.Format("{0:P2}", wife.Accuracy));
     }
 
     public override void _Draw()

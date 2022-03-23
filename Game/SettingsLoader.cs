@@ -12,6 +12,7 @@ public struct Settings
     public float PrepareTime;
     public float InputOffset;
     public InputLogicType InputLogic;
+    public bool SkinEditMode;
     // Video
     public bool Vsync;
     public float FpsLimit;
