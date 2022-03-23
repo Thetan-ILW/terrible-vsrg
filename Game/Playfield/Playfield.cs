@@ -31,13 +31,13 @@ public class Playfield : Node2D
 
         _timeLogic = new TimeLogic(
             audio: _audio,
-            time: _chart.Notes[0].Time - settings.PrepareTime,
+            prepareTime: -_chart.Notes[0].Time + settings.PrepareTime,
             timeRate: modifiers.TimeRate,
-            afterPauseTimeDecrease: -750,
+            afterPauseTimeDecrease: 750,
             pauseCooldown: 5000
         );
         
-        _inputLogic = new NearestInputLogic(
+        _inputLogic = new EarlyInputLogic(
             inputMode: _chart.InputMode, 
             scoreSystem: _scoreSystem, 
             inputMap: inputMap,

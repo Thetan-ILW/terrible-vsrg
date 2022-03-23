@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 public class TimeLogic
 {
     private Audio _audio;
@@ -15,23 +17,28 @@ public class TimeLogic
     private float _pauseCooldown = 0;
 
     private System.Threading.Thread _audioStartTimer;
+    private Stopwatch _timer;
+    private float _decreaseTime;
 
-    public TimeLogic(Audio audio, float time, float timeRate, float afterPauseTimeDecrease, float pauseCooldown)
+    public TimeLogic(Audio audio, float prepareTime, float timeRate, float afterPauseTimeDecrease, float pauseCooldown)
     {
-        CurrentTime = time;
+        CurrentTime = 0f;
+        _decreaseTime = prepareTime;
         _audio = audio;
         _timeRate = timeRate;
 
-        _lastPauseTime = time - pauseCooldown;
+        _lastPauseTime = prepareTime - pauseCooldown;
         _afterPauseTimeDecrease = afterPauseTimeDecrease;
         _pauseCooldown = pauseCooldown;
         _audioStartTimer = new System.Threading.Thread(AudioStartTimer);
         _audioStartTimer.Start();
+        _timer = new Stopwatch();
+        _timer.Start();
     }
 
     public void Process(float deltaTime)
     {
-        CurrentTime += deltaTime * _addTime;
+        CurrentTime = (float)_timer.Elapsed.TotalMilliseconds - _decreaseTime;
         _audio.CurrentTime = CurrentTime;
     }
 
@@ -51,20 +58,20 @@ public class TimeLogic
     {
         if (!_isPaused && CurrentTime > _lastPauseTime + _pauseCooldown)
         {
-            _addTime = _pauseTimeMultiply;
+            _timer.Stop();
             _audio.StreamPaused = true;
             _isPaused = true;
         }
         else if (_isPaused)
         {
-            _addTime = _timeMultiply;
-
             if (CurrentTime - _afterPauseTimeDecrease < 0f)
-                CurrentTime = 0f;
+                _decreaseTime = (float)_timer.Elapsed.TotalMilliseconds;
             else
-                CurrentTime += _afterPauseTimeDecrease; // legal cheats :)
+                _decreaseTime += _afterPauseTimeDecrease; // legal cheats :)
             
+            CurrentTime = (float)_timer.Elapsed.TotalMilliseconds - _decreaseTime;
             _isPaused = false;
+            _timer.Start();
             _audio.Play(CurrentTime / 1000);
             _audio.StreamPaused = false;
             _lastPauseTime = CurrentTime;
