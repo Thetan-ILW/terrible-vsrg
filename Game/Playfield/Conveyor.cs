@@ -3,7 +3,8 @@ using Godot;
 public enum ConveyorDrawType
 {
     RealTime,
-    FixedFps
+    FixedFps,
+    PhysicsFps
 }
 
 public abstract class Conveyor : Node2D
@@ -87,14 +88,60 @@ public class RealTimeConveyor : Conveyor
 }
 
 public class FixedFpsConveyor : Conveyor
-{   // Draw notes (physics_fps) times per second
-    public FixedFpsConveyor(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed)
+{   // Draw notes (fixed_value) times per second
+    private double _fixedDeltaTime;
+    private double _fixedTime;
+    private double _referenceTime;
+
+    public FixedFpsConveyor(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed, double fps)
     {
         Constuct(ref notes, skin, timeLogic, gameLogic, scrollSpeed);
+        _fixedDeltaTime = 1 / fps;
+    }
+
+    public override void _Process(float delta) => FixedUpdate(delta);
+
+    private void FixedUpdate(float deltaTime)
+    { // https://answers.unity.com/questions/457759/is-it-possible-to-create-a-second-fixedupdate-func.html
+        _referenceTime += deltaTime;
+
+        while(_fixedTime < _referenceTime)
+        {
+            _fixedTime += _fixedDeltaTime;
+            Draw();
+        }
+    }
+
+    public void Draw()
+    {
+        _currentTime = _timeLogic.CurrentTime;
+        _nextExistingNote = _gameLogic.NextExistingNote;
+        _keyState = _gameLogic.KeyState;
+        
+        _drawableNotes.Update(
+            _nextExistingNote,
+            _currentTime,
+            ScrollSpeed
+        );
+
+        _drawableKeys.Update(
+            _keyState
+        );
+
+        Update();
+    }
+}
+
+public class PhysicsFpsConveyor : Conveyor
+{
+    public PhysicsFpsConveyor(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed, int fps)
+    {
+        Constuct(ref notes, skin, timeLogic, gameLogic, scrollSpeed);
+        Engine.IterationsPerSecond = fps;
     }
 
     public override void _PhysicsProcess(float delta)
-    {   
+    {
         _currentTime = _timeLogic.CurrentTime;
         _nextExistingNote = _gameLogic.NextExistingNote;
         _keyState = _gameLogic.KeyState;

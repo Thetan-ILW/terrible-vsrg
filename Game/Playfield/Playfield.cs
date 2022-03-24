@@ -52,12 +52,13 @@ public class Playfield : Node2D
             inputLogic: _inputLogic
         );
 
-        _conveyor = new RealTimeConveyor(
+        _conveyor = new FixedFpsConveyor(
             notes: ref _chart.Notes,
             skin: _skin,
             timeLogic: _timeLogic,
             gameLogic: _gameLogic,
-            scrollSpeed: settings.ScrollSpeed
+            scrollSpeed: settings.ScrollSpeed,
+            fps: 60
         );
         AddChild(_conveyor);
 

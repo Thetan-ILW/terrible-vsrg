@@ -102,7 +102,6 @@ change_resolution={
 
 [physics]
 
-common/physics_fps=120
 common/physics_jitter_fix=0.0
 2d/thread_model=2
 common/enable_object_picking=false
