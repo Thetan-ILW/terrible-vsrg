@@ -16,13 +16,15 @@ public class TimeLogic
     private float _afterPauseTimeDecrease = 0;
     private float _pauseCooldown = 0;
 
-    private System.Threading.Thread _audioStartTimer;
+    private delegate void ProcessType();
+    private ProcessType _processType;
+
     private Stopwatch _timer;
     private float _decreaseTime;
 
     public TimeLogic(Audio audio, float prepareTime, float timeRate, float afterPauseTimeDecrease, float pauseCooldown)
     {
-        CurrentTime = 0f;
+        CurrentTime = -prepareTime;
         _decreaseTime = prepareTime;
         _audio = audio;
         _timeRate = timeRate;
@@ -30,28 +32,41 @@ public class TimeLogic
         _lastPauseTime = prepareTime - pauseCooldown;
         _afterPauseTimeDecrease = afterPauseTimeDecrease;
         _pauseCooldown = pauseCooldown;
-        _audioStartTimer = new System.Threading.Thread(AudioStartTimer);
-        _audioStartTimer.Start();
+
         _timer = new Stopwatch();
-        _timer.Start();
+        _processType = ProcessBeforeTimer;
     }
 
     public void Process(float deltaTime)
     {
-        CurrentTime = (float)_timer.Elapsed.TotalMilliseconds - _decreaseTime;
-        _audio.CurrentTime = CurrentTime;
+        _processType();
     }
 
-    public void AudioStartTimer()
+    private void RegularProcess()
     {
-        for (;;)
+        ProcessTime();
+    }
+
+    private void ProcessBeforeAudio()
+    {
+        ProcessTime();
+        if(CurrentTime > 0)
         {
-            if(CurrentTime > 0)
-            {
-                _audio.Play(CurrentTime / 1000);
-                return;
-            }
+            _audio.Play(CurrentTime / 1000);
+            _processType = RegularProcess;
         }
+    }
+
+    private void ProcessBeforeTimer()
+    {
+        _timer.Start();
+        _processType = ProcessBeforeAudio;
+    }
+
+    private void ProcessTime()
+    {
+        CurrentTime = (float)_timer.Elapsed.TotalMilliseconds - _decreaseTime;
+        _audio.CurrentTime = CurrentTime;
     }
 
     public void SetPause()
