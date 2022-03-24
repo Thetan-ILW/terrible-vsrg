@@ -7,9 +7,10 @@ public class NoteLogic
 
     private float _lateMiss = 155;
 
-    public NoteLogic(ScoreSystem scoreSystem)
+    public NoteLogic(ScoreSystem scoreSystem, float lateMiss,float timeRate)
     {
         _scoreSystem = scoreSystem;
+        _lateMiss = lateMiss * timeRate;
     }
 
     public void Process(ref Note[] notes)

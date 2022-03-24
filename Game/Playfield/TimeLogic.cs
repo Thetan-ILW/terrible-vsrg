@@ -53,6 +53,7 @@ public class TimeLogic
         if(CurrentTime > 0)
         {
             _audio.Play(CurrentTime / 1000);
+            _audio.SetPlaybackSpeed(_timeRate);
             _processType = RegularProcess;
         }
     }
@@ -65,7 +66,7 @@ public class TimeLogic
 
     private void ProcessTime()
     {
-        CurrentTime = (float)_timer.Elapsed.TotalMilliseconds - _decreaseTime;
+        CurrentTime = (float)(_timer.Elapsed.TotalMilliseconds * _timeRate) - (_decreaseTime * _timeRate);
         _audio.CurrentTime = CurrentTime;
     }
 

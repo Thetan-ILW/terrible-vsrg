@@ -27,7 +27,7 @@ public class ScreenBuilder
         SkinLoader skinLoader = new SkinLoader();
         Skin skin = skinLoader.Build(chart.InputMode, "Userdata/Skin/");
 
-        Modifiers modifiers = new Modifiers(true, 1f);
+        Modifiers modifiers = new Modifiers(true, 1.5f);
 
         Audio audio = new Audio(modifiers.TimeRate, settings.MusicVolume);
 

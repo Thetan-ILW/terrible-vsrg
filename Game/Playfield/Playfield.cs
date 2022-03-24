@@ -27,7 +27,11 @@ public class Playfield : Node2D
         int[] inputMap = settings.InputMap[chart.InputMode];
 
         _scoreSystem = new ScoreSystem();
-        _noteLogic = new NoteLogic(_scoreSystem);
+        _noteLogic = new NoteLogic(
+            _scoreSystem,
+            lateMiss: 155,
+            timeRate: modifiers.TimeRate
+        );
 
         _timeLogic = new TimeLogic(
             audio: _audio,
@@ -40,8 +44,9 @@ public class Playfield : Node2D
         _inputLogic = new EarlyInputLogic(
             inputMode: _chart.InputMode, 
             scoreSystem: _scoreSystem, 
-            inputMap: inputMap,
-            hitWindow: 155f
+            hitWindow: 155f,
+            timeRate: modifiers.TimeRate,
+            inputMap: inputMap
         );
 
         _gameLogic = new GameLogic(
@@ -58,6 +63,7 @@ public class Playfield : Node2D
             timeLogic: _timeLogic,
             gameLogic: _gameLogic,
             scrollSpeed: settings.ScrollSpeed,
+            timeRate: modifiers.TimeRate,
             fps: 60
         );
         AddChild(_conveyor);

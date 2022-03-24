@@ -1,42 +1,42 @@
 public class HpScoreSystem : IScoreSystem
 {
-    public float hp {get; private set;}
-    public bool isDead {get; private set;}
+    public float Hp {get; private set;}
+    public bool IsDead {get; private set;}
 
-    private float hpIncrease = 0.05f;
-    private float hpDecrease = 0.1f;
+    private float _hpIncrease = 0.05f;
+    private float _hpDecrease = 0.1f;
 
     public HpScoreSystem(float hp, float hpIncrease, float hpDecrease)
     {
-        this.hp = hp;
-        this.isDead = false;
-        this.hpIncrease = hpIncrease;
-        this.hpDecrease = hpDecrease;
+        Hp = Hp;
+        IsDead = false;
+        _hpIncrease = hpIncrease;
+        _hpDecrease = hpDecrease;
     }
 
     public void ProcessHit(float deltaTime)
     {
-        if (isDead)
+        if (IsDead)
             return;
 
-        if (hp < 1)
-            hp += hpIncrease;
+        if (Hp < 1)
+            Hp += _hpIncrease;
         
-        if (hp > 1)
-            hp = 1;
+        if (Hp > 1)
+            Hp = 1;
     }
 
     public void ProcessMiss()
     {
-        if (isDead)
+        if (IsDead)
             return;
 
-        hp -= hpDecrease;
+        Hp -= _hpDecrease;
 
-        if (hp <= 0)
+        if (Hp <= 0)
         {
-            hp = 0;
-            isDead = true;
+            Hp = 0;
+            IsDead = true;
         }
     }
 }

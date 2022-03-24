@@ -23,14 +23,14 @@ public abstract class Conveyor : Node2D
 
     public float ScrollSpeed = 0;
 
-    protected void Constuct(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed)
+    protected void Constuct(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed, float timeRate)
     {
         _notes = notes;
         _skin = skin;
         _timeLogic = timeLogic;
         _gameLogic = gameLogic;
         _keyState = _gameLogic.KeyState;
-        ScrollSpeed = scrollSpeed;
+        ScrollSpeed = scrollSpeed / timeRate;
 
         _drawableNotes = new DrawableNotes(
             ref _notes,
@@ -62,9 +62,9 @@ public abstract class Conveyor : Node2D
 
 public class RealTimeConveyor : Conveyor
 {   // Draw notes every frame
-    public RealTimeConveyor(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed)
+    public RealTimeConveyor(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed, float timeRate)
     {
-        Constuct(ref notes, skin, timeLogic, gameLogic, scrollSpeed);
+        Constuct(ref notes, skin, timeLogic, gameLogic, scrollSpeed, timeRate);
     }
 
     public override void _Process(float delta)
@@ -93,9 +93,9 @@ public class FixedFpsConveyor : Conveyor
     private double _fixedTime;
     private double _referenceTime;
 
-    public FixedFpsConveyor(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed, double fps)
+    public FixedFpsConveyor(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed, float timeRate, double fps)
     {
-        Constuct(ref notes, skin, timeLogic, gameLogic, scrollSpeed);
+        Constuct(ref notes, skin, timeLogic, gameLogic, scrollSpeed, timeRate);
         _fixedDeltaTime = 1 / fps;
     }
 
@@ -134,9 +134,9 @@ public class FixedFpsConveyor : Conveyor
 
 public class PhysicsFpsConveyor : Conveyor
 {
-    public PhysicsFpsConveyor(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed, int fps)
+    public PhysicsFpsConveyor(ref Note[] notes, Skin skin, TimeLogic timeLogic, GameLogic gameLogic, float scrollSpeed, float timeRate, int fps)
     {
-        Constuct(ref notes, skin, timeLogic, gameLogic, scrollSpeed);
+        Constuct(ref notes, skin, timeLogic, gameLogic, scrollSpeed, timeRate);
         Engine.IterationsPerSecond = fps;
     }
 

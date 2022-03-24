@@ -15,14 +15,16 @@ public abstract class InputLogic
     public int NextExistingNote { get; private set; }
 
     protected float _hitWindow;
+    protected float _timeRate;
 
     protected ScoreSystem _scoreSystem;
 
-    public void Construct(int inputMode, ScoreSystem scoreSystem, float hitWindow, int[] inputMap)
+    public void Construct(int inputMode, ScoreSystem scoreSystem, float hitWindow, float timeRate, int[] inputMap)
     {
         _scoreSystem = scoreSystem;
-        _hitWindow = hitWindow;
+        _hitWindow = hitWindow * timeRate;
         _inputMap = inputMap;
+        _timeRate = timeRate;
         KeyState = new bool[inputMode];
     }
 
@@ -73,18 +75,34 @@ public abstract class InputLogic
     
     }
 
+    public void CountNote(Note[] notes, int noteIndex, float time)
+    {
+        float earlyTime = notes[noteIndex].Time - _hitWindow;
+        float lateTime = notes[noteIndex].Time + _hitWindow;
+        float deltaTime = 0;
+
+        if (time > earlyTime && time < lateTime)
+        {
+            deltaTime = notes[noteIndex].Time - time;
+            _scoreSystem.ProcessHit(deltaTime);
+            notes[noteIndex].IsExist = false;
+            return;
+        }
+    }
+
     public abstract void ProcessPress(int column, float time, ref Note[] note);
 }
 
 public class EarlyInputLogic : InputLogic
 {
     // Count only the earliest existing note
-    public EarlyInputLogic(int inputMode, ScoreSystem scoreSystem, int[] inputMap, float hitWindow)
+    public EarlyInputLogic(int inputMode, ScoreSystem scoreSystem, float hitWindow, float timeRate, int[] inputMap)
     {
         Construct(
             inputMode,
             scoreSystem,
             hitWindow,
+            timeRate,
             inputMap
         );
     }
@@ -126,12 +144,13 @@ public class NearestInputLogic : InputLogic
 {
     // Looking for an early and late note relative to the current time
     // And we count the nearest of these two
-    public NearestInputLogic(int inputMode, ScoreSystem scoreSystem, int[] inputMap, float hitWindow)
+    public NearestInputLogic(int inputMode, ScoreSystem scoreSystem, float hitWindow, float timeRate, int[] inputMap)
     {
         Construct(
             inputMode,
             scoreSystem,
             hitWindow,
+            timeRate,
             inputMap
         );
     }
@@ -203,20 +222,5 @@ public class NearestInputLogic : InputLogic
                 return i;
         }
         return -1;
-    }
-
-    public void CountNote(Note[] notes, int noteIndex, float time)
-    {
-        float earlyTime = notes[noteIndex].Time - _hitWindow;
-        float lateTime = notes[noteIndex].Time + _hitWindow;
-        float deltaTime = 0;
-
-        if (time > earlyTime && time < lateTime)
-        {
-            deltaTime = notes[noteIndex].Time - time;
-            _scoreSystem.ProcessHit(deltaTime);
-            notes[noteIndex].IsExist = false;
-            return;
-        }
     }
 }
