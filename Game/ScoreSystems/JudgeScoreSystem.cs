@@ -32,7 +32,7 @@ public class JudgeScoreSystem : IScoreSystem
     }
 
     private TimingWindows _timingWindows;
-    public JudgeCount Judge;
+    public JudgeCount Count;
     public JudgeName LastJudge = JudgeName.None;
 
     public JudgeScoreSystem(float maxWindow, float goodWindow, float badWindow)
@@ -43,7 +43,7 @@ public class JudgeScoreSystem : IScoreSystem
             badWindow
         );
 
-        Judge = new JudgeCount();
+        Count = new JudgeCount();
     }
 
     public void ProcessHit(float deltaTime)
@@ -51,19 +51,19 @@ public class JudgeScoreSystem : IScoreSystem
         deltaTime = System.Math.Abs(deltaTime);
         if (deltaTime <= _timingWindows.Max) 
         {
-            Judge.Max++; 
+            Count.Max++; 
             LastJudge = JudgeName.Max;
             return;
         }
         else if (deltaTime <= _timingWindows.Good)
         {
-            Judge.Good++; 
+            Count.Good++; 
             LastJudge = JudgeName.Good;
             return;
         }
         if (deltaTime <= _timingWindows.Bad) 
         {
-            Judge.Bad++; 
+            Count.Bad++; 
             LastJudge = JudgeName.Bad;
             return;
         }
@@ -71,7 +71,7 @@ public class JudgeScoreSystem : IScoreSystem
 
     public void ProcessMiss()
     {
-        Judge.Miss++;
+        Count.Miss++;
         LastJudge = JudgeName.Miss;
     }
 }

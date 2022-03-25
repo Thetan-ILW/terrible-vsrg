@@ -16,12 +16,15 @@ public class Playfield : Node2D
     private NoteLogic _noteLogic;
     private InputLogic _inputLogic;
 
+    private float _timeRate;
+
     public Playfield() {}
-    public Playfield(Main main, Skin skin, Chart chart, Audio audio, Modifiers modifiers, Settings settings)
+    public Playfield(Main main, Skin skin, Chart chart, Audio audio, Settings settings, float timeRate)
     {
         _main = main;
-        _skin = skin;
         _chart = chart;
+        _timeRate = timeRate;
+        _skin = skin;
         _audio = audio;
         
         int[] inputMap = settings.InputMap[chart.InputMode];
@@ -30,13 +33,13 @@ public class Playfield : Node2D
         _noteLogic = new NoteLogic(
             _scoreSystem,
             lateMiss: 155,
-            timeRate: modifiers.TimeRate
+            timeRate: timeRate
         );
 
         _timeLogic = new TimeLogic(
             audio: _audio,
             prepareTime: -_chart.Notes[0].Time + settings.PrepareTime,
-            timeRate: modifiers.TimeRate,
+            timeRate: _timeRate,
             afterPauseTimeDecrease: 750,
             pauseCooldown: 5000
         );
@@ -45,7 +48,7 @@ public class Playfield : Node2D
             inputMode: _chart.InputMode, 
             scoreSystem: _scoreSystem, 
             hitWindow: 155f,
-            timeRate: modifiers.TimeRate,
+            timeRate: _timeRate,
             inputMap: inputMap
         );
 
@@ -57,14 +60,13 @@ public class Playfield : Node2D
             inputLogic: _inputLogic
         );
 
-        _conveyor = new FixedFpsConveyor(
+        _conveyor = new RealTimeConveyor(
             notes: ref _chart.Notes,
             skin: _skin,
             timeLogic: _timeLogic,
             gameLogic: _gameLogic,
             scrollSpeed: settings.ScrollSpeed,
-            timeRate: modifiers.TimeRate,
-            fps: 60
+            timeRate: _timeRate
         );
         AddChild(_conveyor);
 
@@ -113,6 +115,6 @@ public class Playfield : Node2D
 
     public void ChartEnded()
     {
-        _main.SetToResultScreen(_scoreSystem);
+        _main.SetToResultScreen(_chart, _scoreSystem);
     }
 }

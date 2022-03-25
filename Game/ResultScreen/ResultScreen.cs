@@ -2,41 +2,49 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class ResultScreen : Node2D
+public class ResultScreen : Control
 {
     private Main _main;
-
-    private Dictionary<string, DrawableText> info;
-
     private ScoreSystem _scoreSystem;
 
-    public ResultScreen() {}
-    public ResultScreen(Main main, ScoreSystem scoreSystem)
+    public void Init(Main main,Chart chart, ScoreSystem scoreSystem)
     {
         _main = main;
         _scoreSystem = scoreSystem;
+
         var baseScoreSystem = (BaseScoreSystem)_scoreSystem.Container["Base"];
+        var judge = (JudgeScoreSystem)_scoreSystem.Container["Judge"];
         var wife = (WifeScoreSystem)_scoreSystem.Container["Wife"];
 
-        var font = new DynamicFont();
-        font.FontData = ResourceLoader.Load<DynamicFontData>("res://Assets/Roboto-Light.ttf");
-        font.Size = 48;
+        _main.GetTree().Root.Connect("size_changed", this, nameof(SetWindowSize));
+        SetWindowSize();
 
-        info = new Dictionary<string, DrawableText>();
-        
-        info.Add("MaxCombo", new DrawableText(font, new Vector2(0,0)));
-        info.Add("Accuracy", new DrawableText(font, new Vector2(0,40)));
-        info["MaxCombo"].SetText("Max combo: " + Convert.ToString(baseScoreSystem.MaxCombo));
-        info["Accuracy"].SetText("Accuracy: " + string.Format("{0:P2}", wife.Accuracy));
+        SetHeader(chart);
+        SetPlayInfo(wife, judge);
     }
 
-    public override void _Draw()
+    private void SetHeader(Chart chart)
     {
-        foreach(var text in info)
-        {
-            text.Value.Draw(this);
-        }
+        var title = GetNode<Label>("Header/ChartName");
+        title.Text = $"{chart.Artist} - {chart.Title} [{chart.Difficulty}]";
     }
+
+    private void SetPlayInfo(WifeScoreSystem wife, JudgeScoreSystem judge)
+    {
+        var accuracy = GetNode<Label>("Info/Player/Accuracy");
+        var max = GetNode<Label>("Info/Player/MaxCount");
+        var good = GetNode<Label>("Info/Player/GoodCount");
+        var bad = GetNode<Label>("Info/Player/BadCount");
+        var miss = GetNode<Label>("Info/Player/MissCount");
+
+        accuracy.Text += string.Format("{0:P2}", wife.Accuracy);
+        max.Text += judge.Count.Max.ToString();
+        good.Text += judge.Count.Good.ToString();
+        bad.Text += judge.Count.Bad.ToString();
+        miss.Text += judge.Count.Miss.ToString();
+    }
+
+    public void SetWindowSize() => RectSize = OS.WindowSize;
 
     public override void _Input(InputEvent input)
     {

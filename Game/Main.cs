@@ -53,10 +53,10 @@ public class Main : Node2D
         Input.SetMouseMode(Input.MouseMode.Hidden);
     }
 
-    public void SetToResultScreen(ScoreSystem scoreSystem)
+    public void SetToResultScreen(Chart chart, ScoreSystem scoreSystem)
     {
         RemoveChild(_playfield);
-        _resultScreen = _screenBuilder.GetResultScreen(this, scoreSystem);
+        _resultScreen = _screenBuilder.GetResultScreen(this, chart, scoreSystem);
         AddChild(_resultScreen);
         _currentScreen = Screen.Result;
         Input.SetMouseMode(Input.MouseMode.Visible);

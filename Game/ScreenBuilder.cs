@@ -4,7 +4,7 @@ public class ScreenBuilder
 {
     public SongSelect GetSongSelect(Main main)
     {
-        PackedScene songSelectScene = GD.Load<PackedScene>("res://Nodes/SongSelect.tscn");
+        PackedScene songSelectScene = GD.Load<PackedScene>("res://Screens/SongSelect.tscn");
         SongSelect songSelect = songSelectScene.Instance<SongSelect>();
         songSelect.Init(main);
         return songSelect;
@@ -27,18 +27,21 @@ public class ScreenBuilder
         SkinLoader skinLoader = new SkinLoader();
         Skin skin = skinLoader.Build(chart.InputMode, "Userdata/Skin/");
 
-        Modifiers modifiers = new Modifiers(true, 1.5f);
+        float timeRate = 1f;
 
-        Audio audio = new Audio(modifiers.TimeRate, settings.MusicVolume);
+        Audio audio = new Audio(timeRate, settings.MusicVolume);
 
-        audio.SetPlaybackSpeed(modifiers.TimeRate);
+        audio.SetPlaybackSpeed(timeRate);
         audio.SetAudio(directoryName + chart.AudioPath);
 
-        return new Playfield(main, skin, chart, audio, modifiers, settings);
+        return new Playfield(main, skin, chart, audio, settings, timeRate);
     }
 
-    public ResultScreen GetResultScreen(Main main, ScoreSystem scoreSystem)
+    public ResultScreen GetResultScreen(Main main, Chart chart, ScoreSystem scoreSystem)
     {
-        return new ResultScreen(main, scoreSystem);
+        PackedScene resultScreenScene = GD.Load<PackedScene>("res://Screens/ResultScreen.tscn");
+        ResultScreen resultScreen = resultScreenScene.Instance<ResultScreen>();
+        resultScreen.Init(main, chart, scoreSystem);
+        return resultScreen;
     }
 }
