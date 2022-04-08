@@ -1,0 +1,97 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Assets/Roboto-Light.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Game/SettingsScreen/Setting.cs" type="Script" id=2]
+
+[node name="SettingsScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="Table" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+
+[node name="Music" type="HBoxContainer" parent="Table"]
+margin_right = 1260.0
+margin_bottom = 43.0
+
+[node name="Name" type="Label" parent="Table/Music"]
+margin_right = 226.0
+margin_bottom = 43.0
+custom_fonts/font = ExtResource( 1 )
+text = "Music Volume"
+
+[node name="Value" type="HSlider" parent="Table/Music"]
+margin_left = 230.0
+margin_right = 1169.0
+margin_bottom = 43.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+value = 20.0
+
+[node name="ValueInfo" type="Label" parent="Table/Music"]
+margin_left = 1173.0
+margin_right = 1260.0
+margin_bottom = 43.0
+custom_fonts/font = ExtResource( 1 )
+text = "100%"
+
+[node name="ScrollSpeed" type="HBoxContainer" parent="Table"]
+margin_top = 47.0
+margin_right = 1260.0
+margin_bottom = 90.0
+
+[node name="Name" type="Label" parent="Table/ScrollSpeed"]
+margin_right = 193.0
+margin_bottom = 43.0
+custom_fonts/font = ExtResource( 1 )
+text = "Scroll speed"
+
+[node name="Value" type="HSlider" parent="Table/ScrollSpeed"]
+margin_left = 197.0
+margin_right = 1207.0
+margin_bottom = 43.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = 0.05
+max_value = 3.0
+step = 0.05
+value = 1.0
+
+[node name="ValueInfo" type="Label" parent="Table/ScrollSpeed"]
+margin_left = 1211.0
+margin_right = 1260.0
+margin_bottom = 43.0
+custom_fonts/font = ExtResource( 1 )
+text = "1.7"
+
+[node name="InputLogic" type="HBoxContainer" parent="Table"]
+margin_top = 94.0
+margin_right = 1260.0
+margin_bottom = 143.0
+
+[node name="Name" type="Label" parent="Table/InputLogic"]
+margin_top = 3.0
+margin_right = 168.0
+margin_bottom = 46.0
+custom_fonts/font = ExtResource( 1 )
+text = "InputLogic"
+
+[node name="Value" type="MenuButton" parent="Table/InputLogic"]
+margin_left = 172.0
+margin_right = 1207.0
+margin_bottom = 49.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 1 )
+text = "Select Input Logic"
+
+[node name="ValueInfo" type="Label" parent="Table/InputLogic"]
+margin_left = 1211.0
+margin_top = 3.0
+margin_right = 1260.0
+margin_bottom = 46.0
+custom_fonts/font = ExtResource( 1 )
+text = "1.7"

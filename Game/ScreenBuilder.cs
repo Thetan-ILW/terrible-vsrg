@@ -2,19 +2,8 @@ using Godot;
 
 public class ScreenBuilder
 {
-    public SongSelect GetSongSelect(Main main)
+    public Playfield GetPlayfield(Main main, Settings settings, string chartPath, float timeRate)
     {
-        PackedScene songSelectScene = GD.Load<PackedScene>("res://Screens/SongSelect.tscn");
-        SongSelect songSelect = songSelectScene.Instance<SongSelect>();
-        songSelect.Init(main);
-        return songSelect;
-    }
-
-    public Playfield GetPlayfield(Main main, string chartPath)
-    {
-        SettingsLoader settingsLoader = new SettingsLoader();
-        Settings settings = settingsLoader.GetSettings();
-    
         string directoryName = chartPath.Substring(
             0, 
             chartPath.LastIndexOf("/") + 1
@@ -26,8 +15,6 @@ public class ScreenBuilder
 
         SkinLoader skinLoader = new SkinLoader();
         Skin skin = skinLoader.Build(chart.InputMode, "Userdata/Skin/");
-
-        float timeRate = 1f;
 
         Audio audio = new Audio(timeRate, settings.MusicVolume);
 

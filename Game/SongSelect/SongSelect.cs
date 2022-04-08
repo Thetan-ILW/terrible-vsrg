@@ -1,19 +1,23 @@
 using Godot;
-using System;
 
-public class SongSelect : Node2D
+public class SongSelect : Control
 {
     private Main _main;
-    private LineEdit _chartPath;
+    private LineEdit _chartPathLineEdit;
+    private HSlider _timeRateSlider;
 
     public void Init(Main main)
     {
         _main = main;
-        _chartPath = GetNode<LineEdit>("ChartPath");
+        _chartPathLineEdit = GetNode<LineEdit>("VBoxContainer/HBoxContainer/LineEdit");
+        _timeRateSlider = GetNode<HSlider>("VBoxContainer/HBoxContainer2/HSlider");
     }
 
     public void StartChart()
     {
-        _main.StartChart(_chartPath.Text);
+        _main.StartChart(
+            _chartPathLineEdit.Text,
+            (float)_timeRateSlider.Value
+        );
     }
 }

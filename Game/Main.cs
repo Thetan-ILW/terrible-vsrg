@@ -10,6 +10,7 @@ public class Main : Node2D
         Result
     }
 
+    private SettingsManager _settingsManager;
     private Settings _settings;
 
     private ScreenBuilder _screenBuilder;
@@ -18,11 +19,21 @@ public class Main : Node2D
     private ResultScreen _resultScreen;
     private Screen _currentScreen;
 
+    private AnimationPlayer _animation;
+    private SettingsMenu _settingsMenu;
+
     public override void _Ready()
     {
-        SettingsLoader settingsLoader = new SettingsLoader();
+        _settingsManager = new SettingsManager();
         _screenBuilder = new ScreenBuilder();
-        _settings = settingsLoader.GetSettings();
+        _settings = _settingsManager.Settings;
+
+        _animation = GetNode<AnimationPlayer>("CanvasUi/AnimationPlayer");
+        _songSelect = GetNode<SongSelect>("CanvasUi/SongSelect");
+        _songSelect.Init(this);
+        _settingsMenu = GetNode<SettingsMenu>("CanvasUi/SettingsMenu");
+        _settingsMenu.Init(this, _settingsManager.Settings);
+
         SetToSongSelect();
     }
 
@@ -37,17 +48,16 @@ public class Main : Node2D
         if (_currentScreen == Screen.Result)
             RemoveChild(_resultScreen);
 
-        _songSelect = _screenBuilder.GetSongSelect(this);
-        AddChild(_songSelect);
         _currentScreen = Screen.SongSelect;
+        _songSelect.Visible = true;
         Input.SetMouseMode(Input.MouseMode.Visible);
     }
 
-    public void StartChart(string chartPath)
+    public void StartChart(string chartPath, float timeRate)
     {
-        RemoveChild(_songSelect);
-        _playfield = _screenBuilder.GetPlayfield(this, chartPath);
+        _playfield = _screenBuilder.GetPlayfield(this, _settings, chartPath, timeRate);
         AddChild(_playfield);
+        _songSelect.Visible = false;
         GetTree().Root.Connect("size_changed", _playfield, nameof(_playfield.SizeChanged));
         _currentScreen = Screen.Playfield;
         Input.SetMouseMode(Input.MouseMode.Hidden);
@@ -61,4 +71,13 @@ public class Main : Node2D
         _currentScreen = Screen.Result;
         Input.SetMouseMode(Input.MouseMode.Visible);
     }
+
+    public void ShowSettings() => _animation.Play("ShowSettings");
+    public void HideSettings() 
+    {
+        _settingsManager.SaveFile();
+        _animation.Play("HideSettings");
+    }
+
+    public void Quit() => GetTree().Quit();
 }

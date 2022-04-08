@@ -16,8 +16,8 @@ public class ResultScreen : Control
         var judge = (JudgeScoreSystem)_scoreSystem.Container["Judge"];
         var wife = (WifeScoreSystem)_scoreSystem.Container["Wife"];
 
-        _main.GetTree().Root.Connect("size_changed", this, nameof(SetWindowSize));
-        SetWindowSize();
+        _main.GetTree().Root.Connect("size_changed", this, nameof(UpdateWindowSize));
+        UpdateWindowSize();
 
         SetHeader(chart);
         SetPlayInfo(wife, judge);
@@ -44,7 +44,7 @@ public class ResultScreen : Control
         miss.Text += judge.Count.Miss.ToString();
     }
 
-    public void SetWindowSize() => RectSize = OS.WindowSize;
+    public void UpdateWindowSize() => RectSize = OS.WindowSize;
 
     public override void _Input(InputEvent input)
     {

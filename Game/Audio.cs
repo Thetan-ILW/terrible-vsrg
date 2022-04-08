@@ -11,7 +11,7 @@ public class Audio : AudioStreamPlayer
     public Audio(float playbackRate, double volume)
     {
         _playbackRate = playbackRate;
-        Volume = volume;
+        Volume = volume / 100;
     }
 
     public void SetAudio(string audioPath)
